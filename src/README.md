@@ -1,2 +1,0 @@
-# playWithYourself
-Music Accompaniment Tool
