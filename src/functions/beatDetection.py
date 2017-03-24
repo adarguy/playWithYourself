@@ -20,7 +20,7 @@ def track_beats(y, sr):
 	onsets = librosa.util.normalize(onset_env)	
 	beats =[]
 	for i in range(len(onsets)):
-		if (onsets[i] > 0.4):
+		if (onsets[i] > 0.47):
 			beats.append(i)
 	beat_times = librosa.frames_to_time(beats, sr=sr);
 	return onsets, beats, beat_times;

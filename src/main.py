@@ -54,7 +54,7 @@ def main():
 	chord_volume = [100]*len(midi_tracks[0]) 	#make variable
 	beat_volume = [100]*len(midi_tracks[1])		#make variable
 	volume = [chord_volume, beat_volume]
-		
+	print tempo
 	""" #FOR TESTING
 		midi_chords  = [60, 62, 64, 65, 67, 69, 71, 72]  # MIDI note number
 		midi_tracks = [midi_chords, midi_chords]
