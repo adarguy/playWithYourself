@@ -41,13 +41,16 @@ def main():
 	
 
 	# WRITE MIDI
-
 	track_num = len(midi_tracks)
 	channel_num = 1 							#mono channel as default
 	time = 0; 									#unless signal starts after 0?
 	tempo = librosa.beat.beat_track(y=y, sr=sr);
 
+	
 	chord_duration = [1]*len(midi_tracks[0])	#make variable
+	
+	#for i in range(len(chord_duration)):
+	#	chord_duration[i] = ...
 	beat_duration = [1]*len(midi_tracks[1])		#make variable
 	duration = [chord_duration, beat_duration] 	#second will be changed to beat_duration
 	
