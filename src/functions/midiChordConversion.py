@@ -1,3 +1,5 @@
+import numpy as np
+
 chord_list = {	'A':[57,61,64],
 				'Am':[57,60,64],
 				'Bb':[58,62,65],
@@ -35,8 +37,27 @@ The 50's to 70's are relatively high on the keyboard.
 
 def convert_chord_to_midi(chords):
 	print "...Converting chord notes to MIDI values"
-	midi_notes = []
+	midi_notes = [[0,0,0]]
 	for i in range(len(chords)):
 		midi_notes.append(chord_list[chords[i]])
 
 	return midi_notes
+
+def determine_durations(chords, startTimes, endTimes, frameIndex):
+	i = 0; j = 0;
+	while (i < len(chords)-2):
+		j = i + 1
+		while (chords[j] == chords[i]):
+			endTimes[i] = endTimes[j]
+			chords =  np.delete(chords, j)
+			startTimes =  np.delete(startTimes, j)
+			endTimes =  np.delete(endTimes, j)
+			frameIndex -= 1
+		i += 1
+
+	return chords, startTimes, endTimes, frameIndex
+
+
+
+
+

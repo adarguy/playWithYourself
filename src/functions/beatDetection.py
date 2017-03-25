@@ -25,8 +25,9 @@ def track_beats(y, sr):
 		if ((onsets[i] > onsets[i-1] and onsets[i] > onsets[i+1]) and onsets[i] > 0.1):
 			beats.append(i)
 	beat_times = librosa.frames_to_time(beats, sr=sr);
-	t = 0
+	
 	#i want to try and find cleaner way to do this...
+	t = 0
 	for i in range(1, len(beat_times)):
 		beat_length = beat_times[i]-beat_times[i-1]
 		if(beat_length < 0.1):

@@ -31,6 +31,7 @@ def main():
 
 	# PREDICT CHORDS	
 	chords, startTimes, endTimes, frameIndex = chordPrediction.get_chords(p['input_file'], beat_times, times);
+	chords, startTimes, endTimes, frameIndex = midiChordConversion.determine_durations(chords, startTimes, endTimes, frameIndex)
 	chordPrediction.print_chords_and_times(chords, startTimes, endTimes, frameIndex, times)
 	
 
@@ -45,30 +46,24 @@ def main():
 	channel_num = 1 							#mono channel as default
 	time = 0; 									#unless signal starts after 0?
 	tempo = librosa.beat.beat_track(y=y, sr=sr);
+	start_duration = (times[-1]-endTimes[-1])/(60/tempo[0])
+									
+	chord_duration = [start_duration]			#chord Parameters
+	chord_volume = [0]
+	for i in range(len(midi_tracks[0])-1):
+		chord_duration.append(round((endTimes[i] - startTimes[i])/(60/tempo[0]), 1))
+		chord_volume.append(100)
+												
+	#beat_duration = [start_duration]			#beat Parameters
+	#beat_volume = [0]
+	#for i in range(len(midi_tracks[0])-1):
+	#	beat_duration.append(round((endTimes[i] - startTimes[i])/(60/tempo[0]), 1))
+	#	beat_volume.append(100)
 
-	
-	chord_duration = [1]*len(midi_tracks[0])	#make variable
-	
-	#for i in range(len(chord_duration)):
-	#	chord_duration[i] = ...
-	beat_duration = [1]*len(midi_tracks[1])		#make variable
-	duration = [chord_duration, beat_duration] 	#second will be changed to beat_duration
-	
-	chord_volume = [100]*len(midi_tracks[0]) 	#make variable
-	beat_volume = [100]*len(midi_tracks[1])		#make variable
-	volume = [chord_volume, beat_volume]
-	print tempo
-	""" #FOR TESTING
-		midi_chords  = [60, 62, 64, 65, 67, 69, 71, 72]  # MIDI note number
-		midi_tracks = [midi_chords, midi_chords]
-		track_num    = 2
-		channel_num  = 1
-		time 	 = 0
-		duration = [[1, 3, 2, 2, 1, 1, 1, 1], [1, 3, 2, 2, 1, 1, 1, 1]]   # In beats
-		tempo    = 60   # In BPM
-		volume   = [100, 100]  # 0-127, as per the MIDI standard
-	"""
-	
+	duration = [chord_duration, chord_duration]
+	volume = [chord_volume, chord_volume]
+
+
 	print midiFileCreation.write_midi_file(p['input_file'], midi_notes, track_num, channel_num, time, duration, tempo[0], volume)
 
 
