@@ -15,14 +15,14 @@ def plot_beats_and_onsets(onsets, beats):
 	plt.show();
 	return times
 
-def track_beats(y, sr):
+def track_beats(y, sr, UI_onset, UI_dynamic):
 	print "...Tracking onsets"
 	onset_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median);
 	onsets = librosa.util.normalize(onset_env)
 	
 	beats = []
 	for i in range(1, len(onsets)-1):
-		if ((onsets[i] > onsets[i-1] and onsets[i] > onsets[i+1]) and onsets[i] > 0.1):
+		if ((onsets[i] > onsets[i-1] and onsets[i] > onsets[i+1]) and onsets[i] > UI_onset):
 			beats.append(i)
 	beat_times = librosa.frames_to_time(beats, sr=sr);
 	
@@ -42,6 +42,7 @@ def track_beats(y, sr):
 			beat_times = np.delete(beat_times, i)
 			beat_times[i-1] += beat_length
 
-	return onsets, beats, beat_times;
+	volume = onsets[beats]*UI_dynamic*127
+	return onsets, beats, volume
 
 	

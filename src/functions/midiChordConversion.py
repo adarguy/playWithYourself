@@ -43,7 +43,7 @@ def convert_chord_to_midi(chords):
 
 	return midi_notes
 
-def determine_durations(chords, startTimes, endTimes, frameIndex):
+def determine_durations(chords, startTimes, endTimes, frameIndex, volume):
 	i = 0; j = 0;
 	while (i < len(chords)-2):
 		j = i + 1
@@ -52,10 +52,13 @@ def determine_durations(chords, startTimes, endTimes, frameIndex):
 			chords =  np.delete(chords, j)
 			startTimes =  np.delete(startTimes, j)
 			endTimes =  np.delete(endTimes, j)
+			if (volume[j] > volume[i]):
+				volume[i] = volume[j]
+			volume = np.delete(volume, j)
 			frameIndex -= 1
 		i += 1
 
-	return chords, startTimes, endTimes, frameIndex
+	return chords, startTimes, endTimes, frameIndex, volume
 
 
 

@@ -37,4 +37,4 @@ def get_chords(input_file, beat_times, times):
 		frameIndex = frameIndex + 1
 		startIndex = startIndex + len(frame)
 	
-	return chords, startTimes, endTimes, frameIndex;
+	return chords, startTimes, endTimes, frameIndex
