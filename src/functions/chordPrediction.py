@@ -8,7 +8,7 @@ import pymir
 def print_chords_and_times(chords, startTimes, endTimes, frameIndex, times):
 	first_onset_time = times[-1]-endTimes[-1]
 	for i in range (frameIndex):
-		print('frame : %6d | chord : %6s | startTime : %8.5f | endTime : %7.5f ' % (i+1,chords[i],startTimes[i]+first_onset_time,endTimes[i]+first_onset_time))
+		print('frame : %6d | chord : %6s | startTime : %8.5f | endTime : %8.5f | length : %7.5f' % (i+1,chords[i],startTimes[i]+first_onset_time,endTimes[i]+first_onset_time, endTimes[i]-startTimes[i]))
 	
 def get_chords(input_file, beat_times, times):
 	print "...Predicting chords"	
@@ -37,4 +37,4 @@ def get_chords(input_file, beat_times, times):
 		frameIndex = frameIndex + 1
 		startIndex = startIndex + len(frame)
 	
-	return chords, startTimes, endTimes, frameIndex;
+	return chords, startTimes, endTimes, frameIndex
