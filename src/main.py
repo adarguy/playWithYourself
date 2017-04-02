@@ -22,18 +22,17 @@ def main():
 	# OPEN FILE
 	args = utils.process_arguments(sys.argv[1:]);
 	y, sr = librosa.load(args['input_file'])
-	UI_onset_threshold = 0.1; UI_dynamic_threshold = 1
-	UI_instrument_chords = 0; UI_instrument_beats = 10
-	UI_instrument_notes = 32; UI_beat_windowSize = 0.1; #100 msec
-
+	
+	UI_instrument_notes = 32; UI_onset_threshold = 0.1;
+	UI_instrument_chords = 0; UI_dynamic_threshold = 1
+	UI_instrument_beats = 10; UI_beat_windowSize = 0.1; #100 msec
 
 
 
 	# TRACK BEATS
 	onsets, beats, volume_notes = beatDetection.track_beats(y, sr, UI_onset_threshold, UI_dynamic_threshold)
 	times = beatDetection.plot_beats_and_onsets(onsets, beats)
-	tempo = librosa.beat.beat_track(y=y, sr=sr);
-	msec_tempo = 60/tempo[0]
+	tempo = librosa.beat.beat_track(y=y, sr=sr); msec_tempo = 60/tempo[0]
 	
 
 
