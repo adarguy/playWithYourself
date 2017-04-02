@@ -26,28 +26,40 @@ chord_list = {	'A':[57,61,64],
 				'G':[67,71,74],
 				'Gm':[67,70,74],
 				'Ab':[68,72,75],
-				'Abm':[68,69,75],
-				}
-""" I'm unsure how the chord list is being used.
-Does the system recognize equivalence between F# and Gb?
-Or do we need to account for that in the chord list.
-Does it matter what range we are in?
-The 50's to 70's are relatively high on the keyboard.
-"""
+				'Abm':[68,69,75]}
 
-def convert_chord_to_midi(chords):
-	print "...Converting chord notes to MIDI values"
-	midi_notes = [[0,0,0]]
-	for i in range(len(chords)):
-		midi_notes.append(chord_list[chords[i]])
+beat_list = {	0:[[42,35],[42],[42,38],[42]],
+				1:[[42,35],[42],[42,38],[42]]}
+
+def convert_note_to_midi(notes):
+	print "...Converting notes to MIDI values"
+	midi_notes = [[0]]
+	for i in range(len(notes)):
+		midi_notes.append([chord_list[notes[i]][0]])
 
 	return midi_notes
 
+def convert_chord_to_midi(chords):
+	print "...Converting chords to MIDI values"
+	midi_chords = [[0,0,0]]
+	for i in range(len(chords)):
+		midi_chords.append(chord_list[chords[i]])
+
+	return midi_chords
+
+def convert_beat_to_midi(beats, pattern=0):
+	print "...Converting beats to MIDI values"
+	midi_beats = [[0]]
+	for i in range(len(beats)):
+		midi_beats.append(beat_list[pattern][i%4])
+
+	return midi_beats
+
 def determine_durations(chords, startTimes, endTimes, frameIndex, volume):
 	i = 0; j = 0;
-	while (i < len(chords)-2):
+	while (i < len(chords)-1):
 		j = i + 1
-		while (chords[j] == chords[i]):
+		if (chords[j] == chords[i]):
 			endTimes[i] = endTimes[j]
 			chords =  np.delete(chords, j)
 			startTimes =  np.delete(startTimes, j)

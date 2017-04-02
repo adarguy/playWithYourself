@@ -2,6 +2,26 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 
+import utils
+
+def alter_beats(s, e, msec_tempo, windowSize):
+	a = [s[0]]; b = []
+	for i in range(len(e)):
+		est_next_beat = round(s[0] + (msec_tempo*(i+1)), 3)
+		near_e, idx_e = utils.find_nearest(e, est_next_beat)
+		near_s, idx_s = utils.find_nearest(s, est_next_beat)
+
+		if (est_next_beat > e[-1]):
+			b.append(e[-1])
+			break;
+		elif ((abs(est_next_beat - near_e) < windowSize)):
+			a.append(near_e)
+			b.append(near_e)
+		else:
+			a.append(est_next_beat)
+			b.append(est_next_beat)
+	return a, b
+
 def plot_beats_and_onsets(onsets, beats):
 	print "...Plotting beats and onsets"
 	plt.figure(figsize=(8, 4));

@@ -1,8 +1,16 @@
 import argparse
+import numpy as np
+
+def find_nearest(array,value):
+    idx = (np.abs(array-value)).argmin()
+    return array[idx], idx
 
 def process_arguments(args):
-    parser = argparse.ArgumentParser(description='Beat tracking example')
+    
+    parser = argparse.ArgumentParser(description='Play With Yourself Accompaniment Tool')
     parser.add_argument('input_file',
                         action='store',
                         help='path to the input file (wav, mp3, etc)')
-    return vars(parser.parse_args(args))
+    args = vars(parser.parse_args(args))
+    print "...Opening File: '" + args['input_file'] + "'"
+    return args

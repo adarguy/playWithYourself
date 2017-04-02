@@ -1,9 +1,20 @@
 import midiutil
 
-def write_midi_file(filename, midi_tracks, channel, program, time, duration, tempo, volume):
+def build_track(UI_instrument, midi_tracks,startTimes, endTimes, volume, msec_tempo, UI_dynamic_threshold):
+	note_volume = [0]; 
+	note_program = UI_instrument; 
+	note_duration = [round(startTimes[0]/msec_tempo, 1)]
+	for i in range(len(midi_tracks)-1):
+		note_duration.append(round((endTimes[i] - startTimes[i])/msec_tempo, 1))
+		note_volume.append(int(round(127-(UI_dynamic_threshold*127))+round(volume[i])))
+
+	return note_duration, note_program, note_volume
+
+def write_midi_file(filename, midi_tracks, program, duration, tempo, volume):
 	print "...Writing MIDI file"
 	MyMIDI = midiutil.MIDIFile(len(midi_tracks))  # number of tracks
-
+	time = 0;
+	channel = 1 	#mono channel as default
 	for i in range(len(midi_tracks)):
 		MyMIDI.addTempo(track=i+1, time=time, tempo=tempo)
 		MyMIDI.addProgramChange(track=i+1, channel=channel-1, time=time, program=program[i])
@@ -17,4 +28,4 @@ def write_midi_file(filename, midi_tracks, channel, program, time, duration, tem
 	with open(filename[:-4]+"_accompaniment.mid", "wb") as output_file:
 		MyMIDI.writeFile(output_file)
 
-	return "...Accompaniment Completed"
+	print "...Accompaniment Completed"
