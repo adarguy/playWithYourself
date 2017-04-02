@@ -48,7 +48,6 @@ def track_beats(y, sr, UI_onset, UI_dynamic, UI_window):
 			beats.append(i)
 	beat_times = librosa.frames_to_time(beats, sr=sr);
 	
-
 	i = 1; j = 0;
 	while (i < len(beat_times)-1):
 		j = i - 1
@@ -60,21 +59,6 @@ def track_beats(y, sr, UI_onset, UI_dynamic, UI_window):
 			beat_times[j] += beat_length
 		i += 1
 
-	#i want to try and find cleaner way to do this...
-	"""t = 0
-	for i in range(1, len(beat_times)):
-		beat_length = beat_times[i]-beat_times[i-1]
-		if(beat_length < 0.1):
-			t += 1;
-	
-	for i in range(1, len(beat_times)-t):
-		beat_length = beat_times[i]-beat_times[i-1]
-		if(beat_length < 0.1):
-			if(beat_times[i] > beat_times[i-1]): del beats[i-1]
-			else: del beats[i]
-			beat_times = np.delete(beat_times, i)
-			beat_times[i-1] += beat_length
-	"""
 	volume = onsets[beats]*UI_dynamic*127
 	
 	return onsets, beats, volume
