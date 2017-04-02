@@ -22,11 +22,13 @@ def alter_beats(s, e, msec_tempo, windowSize):
 			b.append(est_next_beat)
 	return a, b
 
-def plot_beats_and_onsets(onsets, beats):
-	print "...Plotting beats and onsets"
-	plt.figure(figsize=(8, 4));
+def plot_beats_and_onsets(onsets, beats, show):
 	times = librosa.frames_to_time(np.arange(len(onsets)));
+	if (not show): return times
 
+	print "...Plotting beats and onsets"
+	
+	plt.figure(figsize=(8, 4));
 	plt.plot(times, onsets,label='Onset strength');
 	plt.vlines(times[beats], 0, 1, alpha=0.5, color='r',linestyle='--', label='Beats');
 	
@@ -35,7 +37,7 @@ def plot_beats_and_onsets(onsets, beats):
 	plt.show();
 	return times
 
-def track_beats(y, sr, UI_onset, UI_dynamic):
+def track_beats(y, sr, UI_onset, UI_dynamic, UI_window):
 	print "...Tracking onsets"
 	onset_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median);
 	onsets = librosa.util.normalize(onset_env)
@@ -46,8 +48,20 @@ def track_beats(y, sr, UI_onset, UI_dynamic):
 			beats.append(i)
 	beat_times = librosa.frames_to_time(beats, sr=sr);
 	
+
+	i = 1; j = 0;
+	while (i < len(beat_times)-1):
+		j = i - 1
+		beat_length = beat_times[i]-beat_times[j]
+		if(beat_length < UI_window):
+			if(beat_times[i] > beat_times[j]): del beats[j]
+			else: del beats[i]
+			beat_times = np.delete(beat_times, i)
+			beat_times[j] += beat_length
+		i += 1
+
 	#i want to try and find cleaner way to do this...
-	t = 0
+	"""t = 0
 	for i in range(1, len(beat_times)):
 		beat_length = beat_times[i]-beat_times[i-1]
 		if(beat_length < 0.1):
@@ -55,14 +69,14 @@ def track_beats(y, sr, UI_onset, UI_dynamic):
 	
 	for i in range(1, len(beat_times)-t):
 		beat_length = beat_times[i]-beat_times[i-1]
-		#print str(i)+") "+str(beat_times[i] - beat_times[i-1])
 		if(beat_length < 0.1):
 			if(beat_times[i] > beat_times[i-1]): del beats[i-1]
 			else: del beats[i]
 			beat_times = np.delete(beat_times, i)
 			beat_times[i-1] += beat_length
-
+	"""
 	volume = onsets[beats]*UI_dynamic*127
+	
 	return onsets, beats, volume
 
 	

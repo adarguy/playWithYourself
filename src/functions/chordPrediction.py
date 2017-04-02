@@ -4,7 +4,8 @@ import pymir
 import numpy as np
 import sys
 
-def print_chords_and_times(chords, startTimes, endTimes, frameIndex, times):
+def print_chords_and_times(chords, startTimes, endTimes, frameIndex, times, show):
+	if (not show): return
 	for i in range (frameIndex):
 		print('frame : %6d | chord : %6s | startTime : %8.5f | endTime : %8.5f | length : %7.5f' % (i+1,chords[i],startTimes[i],endTimes[i], endTimes[i]-startTimes[i]))
 	

@@ -59,7 +59,7 @@ def determine_durations(chords, startTimes, endTimes, frameIndex, volume):
 	i = 0; j = 0;
 	while (i < len(chords)-1):
 		j = i + 1
-		if (chords[j] == chords[i]):
+		if (chords[i] == chords[j]):
 			endTimes[i] = endTimes[j]
 			chords =  np.delete(chords, j)
 			startTimes =  np.delete(startTimes, j)

@@ -1,12 +1,13 @@
 import argparse
 import numpy as np
+import warnings, logging
 
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
     return array[idx], idx
 
-def process_arguments(args):
-    
+def process_arguments(args, UI_show):
+    logging.captureWarnings(not UI_show)
     parser = argparse.ArgumentParser(description='Play With Yourself Accompaniment Tool')
     parser.add_argument('input_file',
                         action='store',
