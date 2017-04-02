@@ -49,16 +49,16 @@ def track_beats(y, sr, UI_onset, UI_dynamic, UI_window):
 	beat_times = librosa.frames_to_time(beats, sr=sr);
 	
 	i = 1; j = 0;
-	while (i < len(beat_times)-1):
+	while (i < len(beat_times)):
 		j = i - 1
 		beat_length = beat_times[i]-beat_times[j]
-		if(beat_length < UI_window):
+		if(beat_length < UI_window*2):
 			if(beat_times[i] > beat_times[j]): del beats[j]
 			else: del beats[i]
 			beat_times = np.delete(beat_times, i)
 			beat_times[j] += beat_length
 		i += 1
-
+	
 	volume = onsets[beats]*UI_dynamic*127
 	
 	return onsets, beats, volume

@@ -20,7 +20,7 @@ import midiFileCreation
 
 def main():
 	# OPEN FILE
-	show_diagnostics = False;
+	show_diagnostics = True;
 	UI_instrument_notes = 32; UI_onset_threshold = 0.1;
 	UI_instrument_chords = 0; UI_dynamic_threshold = 1
 	UI_instrument_beats = 10; UI_beat_windowSize = 0.1; #100 msec
@@ -33,8 +33,8 @@ def main():
 
 	# TRACK BEATS
 	onsets, beats, volume_notes = beatDetection.track_beats(y, sr, UI_onset_threshold, UI_dynamic_threshold, UI_beat_windowSize)
-	times = beatDetection.plot_beats_and_onsets(onsets, beats, show_diagnostics)
 	tempo = librosa.beat.beat_track(y=y, sr=sr); msec_tempo = 60/tempo[0]
+	times = beatDetection.plot_beats_and_onsets(onsets, beats, show_diagnostics)
 	
 
 
@@ -66,7 +66,7 @@ def main():
 	for i in range(len(midi_tracks)):
 		duration[i], program[i], volume[i] = midiFileCreation.build_track(UI_instrument[i], midi_tracks[i], startTimes[i], endTimes[i], volumes[i],msec_tempo, UI_dynamic_threshold)
 	midiFileCreation.write_midi_file(args['input_file'], midi_tracks, program, duration, tempo[0], volume)
-	
+
 
 
 
