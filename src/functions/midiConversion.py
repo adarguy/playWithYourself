@@ -56,19 +56,19 @@ def convert_beat_to_midi(beats, pattern=0):
 	return midi_beats
 
 def determine_durations(chords, startTimes, endTimes, frameIndex, volume):
-	i = 0; j = 0;
-	while (i < len(chords)-1):
-		j = i + 1
+	i = 1; j = 0;
+	while (i < len(chords)):
 		if (chords[i] == chords[j]):
-			endTimes[i] = endTimes[j]
-			chords =  np.delete(chords, j)
-			startTimes =  np.delete(startTimes, j)
-			endTimes =  np.delete(endTimes, j)
-			if (volume[j] > volume[i]):
-				volume[i] = volume[j]
-			volume = np.delete(volume, j)
+			if (volume[i] > volume[j]):
+				volume = np.delete(volume, j)
+			else:
+				volume = np.delete(volume, i)
+			chords = np.delete(chords, i)
+			startTimes = np.delete(startTimes, i)
+			endTimes = np.delete(endTimes, j)
 			frameIndex -= 1
-		i += 1
+			i -= 1; j -= 1
+		i += 1; j += 1
 
 	return chords, startTimes, endTimes, frameIndex, volume
 

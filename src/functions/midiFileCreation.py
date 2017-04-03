@@ -12,9 +12,9 @@ def build_track(UI_instrument, midi_tracks,startTimes, endTimes, volume, msec_te
 
 def write_midi_file(filename, midi_tracks, program, duration, tempo, volume):
 	print "...Writing MIDI file"
-	MyMIDI = midiutil.MIDIFile(len(midi_tracks))  # number of tracks
+	MyMIDI = midiutil.MIDIFile(len(midi_tracks))
 	time = 0;
-	channel = 1 	#mono channel as default
+	channel = 1
 	for i in range(len(midi_tracks)):
 		MyMIDI.addTempo(track=i+1, time=time, tempo=tempo)
 		MyMIDI.addProgramChange(track=i+1, channel=channel-1, time=time, program=program[i])
