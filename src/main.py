@@ -20,7 +20,7 @@ import midiFileCreation
 
 def main():
 	# OPEN FILE
-	show_diagnostics = False;
+	show_diagnostics = False; UI_beat_pattern = 0;
 	UI_instrument_notes = 32; UI_onset_threshold = 0.1;
 	UI_instrument_chords = 0; UI_dynamic_threshold = 0.7;
 	UI_instrument_beats = 10; UI_beat_windowSize = 0.3; #100 msec
@@ -50,7 +50,7 @@ def main():
 	# NOTES TO MIDI
 	midi_notes = midiConversion.convert_note_to_midi(notes)
 	midi_chords = midiConversion.convert_chord_to_midi(chords)
-	midi_beats = midiConversion.convert_beat_to_midi(endTimes_beats)
+	midi_beats = midiConversion.convert_beat_to_midi(endTimes_beats, UI_beat_pattern)
 
 	
 
