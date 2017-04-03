@@ -23,7 +23,7 @@ def main():
 	show_diagnostics = False; UI_beat_pattern = 0;
 	UI_instrument_notes = 32; UI_onset_threshold = 0.1;
 	UI_instrument_chords = 0; UI_dynamic_threshold = 0.7;
-	UI_instrument_beats = 10; UI_beat_windowSize = 0.3; #100 msec
+	UI_instrument_beats = 10; UI_beat_windowSize = 0.3; #300 msec
 	
 	args = utils.process_arguments(sys.argv[1:], show_diagnostics);
 	y, sr = librosa.load(args['input_file'])
