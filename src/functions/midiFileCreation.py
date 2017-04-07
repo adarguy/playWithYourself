@@ -16,16 +16,15 @@ def write_midi_file(filename, midi_tracks, program, duration, tempo, volume):
 	time = 0;
 	channel = 1
 	for i in range(len(midi_tracks)):
+		if (i == 2): channel = 10
 		MyMIDI.addTempo(track=i+1, time=time, tempo=tempo)
 		MyMIDI.addProgramChange(track=i+1, channel=channel-1, time=time, program=program[i])
 		d = duration[i]; v = volume[i]
 		for j, midi_note in enumerate(midi_tracks[i]):
 			for k in range(len(midi_note)):
-				MyMIDI.addNote(i, channel-1, midi_note[k], time, d[j], v[j])
+					MyMIDI.addNote(i, channel-1, midi_note[k], time, d[j], v[j])
 			time = sum(d[:j+1])
 		time = 0
 
-	with open(filename[:-4]+"_accompaniment.mid", "wb") as output_file:
+	with open(filename[:-4]+".mid", "wb") as output_file:
 		MyMIDI.writeFile(output_file)
-
-	print "...Accompaniment Completed"

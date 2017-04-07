@@ -16,13 +16,16 @@ def get_chords(input_file, beat_times, times):
 	bt = [int(round(x*t, 3)) for x in beat_times]
 	frames = audiofile.framesFromOnsets(bt)
 	
-	chords = []; startTimes = []; endTimes = []; numFrames = 0;
+	chords = []; regs = []; startTimes = []; endTimes = []; numFrames = 0;
 	frameIndex = 0; startIndex = 0;
 	for frame in frames:	
 		spectrum = frame.spectrum();
 		chroma = spectrum.chroma();
 		
-		chord, score = pymir.Pitch.getChord(chroma);	
+		reg = pymir.Pitch.naivePitch(spectrum)
+		regs = np.append(regs, reg[1])
+
+		chord, score = pymir.Pitch.getChord(chroma);
 		chords = np.append(chords, chord);
 
 		endIndex = startIndex + len(frame);
@@ -37,5 +40,5 @@ def get_chords(input_file, beat_times, times):
 		frameIndex = frameIndex + 1
 		startIndex = startIndex + len(frame)
 	
-	return chords, startTimes, endTimes, frameIndex
+	return chords, regs, startTimes, endTimes, frameIndex
 
