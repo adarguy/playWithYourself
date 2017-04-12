@@ -1,42 +1,229 @@
-import argparse, warnings, logging, subprocess, os
+import argparse, warnings, logging, subprocess, sys, os, ntpath
 import scikits.audiolab as audiolab
 import numpy as np
+import midiConversion
 
-def get_arguments(args):
-    config = raw_input('Would you like to use default settings or configure manually? --default/manual\n')  
-    settings = [0]*7
-    if (config == 'manual'):
-        settings[0] = raw_input('-Busyness --Onset (beat) threshold\n')
-        settings[1] = raw_input('-Dynamics --Dynamics threshold\n')
-        settings[2] = raw_input('-Window --Beat Correction Window Size\n')
-        settings[3] = raw_input('-Instrument1 --Instrument for Melodic Accompaniment\n')
-        settings[4] = raw_input('-Instrument2 --Instrument for Harmonic Accompaniment\n')
-        settings[5] = raw_input('-Instrument3 --Instrument for Percussive Accompaniment\n')
-        settings[6] = raw_input('-Pattern --Pattern for Percussive Accompaniment\n')
+def help():
+    print ("\nWelcome to Play With Yourself!\n" #App Description
+    "An Accompaniment tool for the modern musician\n\n"
+    "Play With Yourself is an accompaniment tool that allows users to\n"
+    "create automatic accompaniments to their working songs and projects.\n"
+    "This has been developed in part for a university class on music\n"
+    "information retrieval hosted at the University of Victoria, BC Canada.\n"
+    "Contact the administrator with any inquiries at adarguy10@gmail.com\n")
+    
+    print ("\nThe valid COMMANDS are:\n" #Command Description
+    "load <filename>            -- to read in a wav audio file\n"
+    "save <filename>            -- to save back to a different file\n"
+    "help                       -- to display this help message\n"
+    "quit                       -- to exit the program\n"
+    "stats                      -- to report diagnostics on the input audio file during processing (specify before loading file)\n"
+    "printcontrols              -- print user/default settings for accompaniment <n>\n")
+    
+    print ("\nThe valid USER INPUTS are:\n" #Parameter Description
+    "Busyness <n>               -- Onset (beat) threshold\n"
+    "Dynamics <n>               -- Dynamics threshold\n"
+    "Window <size>              -- Beat Correction Window Size\n"
+    "Instrument 1 <name>        -- Instrument for Melodic Accompaniment\n"
+    "Instrument 2 <name>        -- Instrument for Harmonic Accompaniment\n"
+    "Instrument 3 <name>        -- Instrument for Percussive Accompaniment\n"
+    "Pattern <genre>            -- Pattern for Percussive Accompaniment\n"
+    "Chord Style <style>        -- Closed or Open Chords for Harmonic Accompaniment\n"
+    "Time Signature <n>         -- Chosen Time Signature (3/4 or 4/4 only)\n")
+
+    print ("\nThe valid INSTRUMENT INPUTS are:\n" #Parameter Description
+    "Piano                      -- General MIDI Acoustic Piano\n"
+    "EBass                      -- General MIDI Electric Bass\n"
+    "Drum-set                   -- General MIDI Drum-set\n")
+
+def convert_settings(s):
+    final = {}
+    try:
+        y, sr = librosa.load(settings[0])
+        final['filename'] = settings[0]
+        final['y'] = y
+        final['sr'] = sr
+    except:
+        print "File does not exist or is corrupt"
+        return 0
+
+    final['busy'] = float(settings[1])/10
+    final['dyn'] = float(settings[2])/10
+    try:
+        final['window'] = float(settings[3])/10
+    except:
+        if (settings[3] == 'xs'):
+            final['window'] = 0.1
+        elif (settings[3] == 's'):
+            final['window'] = 0.3
+        elif (settings[3] == 'm'):
+            final['window'] = 0.5
+        elif (settings[3] == 'l'):
+            final['window'] = 0.7
+        elif (settings[3] == 'xl'):
+            final['window'] = 0.9
+        else:
+            print "Invalid user input. Try Again"
+            return 0
+
+        UI_instrument_notes = float(settings[4]);   UI_onset_threshold = float(settings[1]);
+        UI_instrument_chords = float(settings[5]);  UI_dynamic_threshold = float(settings[2]);
+        UI_instrument_beats = float(settings[6]);   UI_beat_windowSize = float(settings[3]); #300 msec
+        UI_beat_pattern = float(settings[7]);       UI_chord_style = float(settings[8]);
+        UI_time_signature = float(settings[9]);     
+
+def get_arguments(f, dic):
+    while (True):
+        config = raw_input('Would you like to use default settings or configure manually? --default/manual\n')
+        config = config.lower()
+        if (config == 'default' or config == 'd' or config == 'manual' or config == 'm'):
+            break;
+        else:
+            print "Invalid Input. Please try again."
+
+    settings = [0]*10; settings[0] = f;
+    if (config == 'manual' or config == 'm'):
+        while (True):
+            settings[1] = raw_input('\nBusyness (integer): ')
+            try:
+                if (int(settings[1]) <= 9 and int(settings[1]) >= 1):
+                    dic['busy'] = int(settings[1])/10.0
+                    break;
+                else: print "Input is not between 1 - 9"
+            except:
+                print "input is not an integer type"
+
+        while (True):
+            settings[2] = raw_input('Dynamics (integer): ')
+            try:
+                if (int(settings[2]) <= 9 and int(settings[2]) >= 1):
+                    dic['dyn'] = int(settings[2])/10.0
+                    break;
+                else: print "Input is not between 1 - 9"
+            except:
+                print "input is not an integer type"
+
+        while (True):
+            settings[3] = raw_input('Window Size (integer): ')
+            try:
+                if (int(settings[3])):
+                    if (int(settings[3]) <= 9 and int(settings[3]) >= 1):
+                        dic['window'] = int(settings[3])/10.0
+                        break;
+                    else: print "Input is not between 1 - 9"
+                if (settings[3] == 'xs'): dic['window'] = 0.1; break
+                elif (settings[3] == 's'): dic['window'] = 0.3; break
+                elif (settings[3] == 'm'): dic['window'] = 0.5; break
+                elif (settings[3] == 'l'): dic['window'] = 0.7; break
+                elif (settings[3] == 'xl'): dic['window'] = 0.9; break
+                else:
+                    print "Input must be 'xs', 's', 'm', 'l', 'xl', or valid integer."
+            except:
+                print "Invalid Input. Type help for a list of valid inputs."
+
+        while (True):
+            settings[4] = raw_input('Instrument One (name): ')
+            try:
+                dic['inst1'] = int(midiConversion.programs(settings[4]))
+                break;
+            except:
+                print "Input is not in the list of valid instruments. Type help for a list of valid instruments."
+
+        while (True):
+            settings[5] = raw_input('Instrument Two (name): ')
+            try:
+                dic['inst2'] = int(midiConversion.programs(settings[5]))
+                break;
+            except:
+                print "Input is not in the list of valid instruments. Type help for a list of valid instruments."
+
+        while (True):
+            settings[6] = raw_input('Instrument Three (name): ')
+            try:
+                dic['inst3'] = int(midiConversion.programs(settings[6]))
+                break;
+            except:
+                print "Input is not in the list of valid instruments. Type help for a list of valid instruments."
+
+        while (True):
+            settings[7] = raw_input('Pattern (genre): ')
+            try:
+                dic['pattern'] = int(midiConversion.genres(settings[7]))
+                break;
+            except:
+                print "Input is not in the list of valid genres. Type help for a list of valid genres."
+        
+        while (True):
+            settings[8] = raw_input('Chord Style (closed or open): ')
+            if (settings[8] == 'closed'):
+                dic['style'] = 0; break;
+            elif (settings[8] == 'open'):
+                dic['style'] = 1; break;
+            else:
+                print "Invalid input. Must be either 'open' or 'closed'."
+
+        while (True):
+            settings[9] = raw_input('Time Signature (3 or 4): ')
+            try:
+                if (int(settings[9]) == 4 or int(settings[9]) == 3):
+                    dic['timeSig'] = int(settings[9]);
+                    break;
+                else:
+                    print "Invalid input. Must be either '3' or '4'."
+            except:
+                print "Input is not a valid integer type."
     else:
-        settings[0] = '0.1';    settings[4] = '0';
-        settings[1] = '0.7';    settings[5] = '35'; 
-        settings[2] = '0.3';    settings[6] = '0';
-        settings[3] = '0';
-    return args+settings
+        dic['busy'] = 0.1
+        dic['dyn'] = 0.7
+        dic['window'] = 0.3
+        dic['inst1'] = 35
+        dic['inst2'] = 0
+        dic['inst3'] = 0
+        dic['pattern'] = 0
+        dic['style'] = 0
+        dic['timeSig'] = 4
+
+    return dic
 
 def process_arguments(args, UI_show):
-    logging.captureWarnings(not UI_show)
-    args = get_arguments(args)
+    UI_show = False; dic = {}
+    try:
+        cmd, param = args.split()
+    except:
+        cmd = args
+    if (cmd == 'load'):
+        try:
+            filename = param;
+            print filename
+            if (os.path.isfile(filename)):
+                dic['filename'] = filename
+            else:
+                print "File does not exist or is corrupt."
+                return 0
+        except:
+            print "no file specified"
+            return 0
 
-    parser = argparse.ArgumentParser(description='An accompaniment tool for the modern musician')
-    parser.add_argument('Filename', action='store', help='--Path to the input wav file')
-    parser.add_argument('Busyness', action='store', help='--Onset (beat) threshold')
-    parser.add_argument('Dynamics', action='store', help='--Dynamics threshold')
-    parser.add_argument('Window', action='store', help='--Beat Correction Window Size')
-    parser.add_argument('Instrument1', action='store', help='--Instrument for Melodic Accompaniment')
-    parser.add_argument('Instrument2', action='store', help='--Instrument for Harmonic Accompaniment')
-    parser.add_argument('Instrument3', action='store', help='--Instrument for Percussive Accompaniment')
-    parser.add_argument('Pattern', action='store', help='--Pattern for Percussive Accompaniment')
-    args = vars(parser.parse_args(args))
+        logging.captureWarnings(not UI_show)
+        dic = get_arguments(filename, dic)
+
+        print "...Opening '" + ntpath.basename(dic['filename']) + "'"
+        return dic
     
-    print "...Opening File: '" + args['Filename'] + "'"
-    return args
+    elif (args == 'save'):
+        print "This piece of the program has not yet been implemented. The .mid file will be saved in the directory of the input audio file.\n"
+    elif (args == 'help'):
+        help()
+    elif (args == 'quit'):
+        sys.exit()
+    elif (args == 'stats'):
+        UI_show = True
+    elif (args == 'printcontrols'):
+        print "...controls"
+    else:
+        print "Invalid Command. Type help for a list of valid commands"
+
+    return 0
 
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
