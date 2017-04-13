@@ -18,13 +18,16 @@ import midiConversion
 import midiFileCreation
 
 
-show_diagnostics = False;
+show_diagnostics = False
+settings = {}
+save = False
 
+cmd = raw_input('\nWelcome to Play With Yourself Accompaniment Tool.\nWhat would you like to do? (-help)\n') 
 while(True):
 	# OPEN FILE
-	first = raw_input('Welcome to Play With Yourself Accompaniment Tool.\nWhat would you like to do? (-help)\n') 
-	settings = utils.process_arguments(first, show_diagnostics);
-	if (settings != 0):
+	cmd, show_diagnostics, settings = utils.process_arguments(cmd, show_diagnostics, settings);
+
+	if (cmd == 'load'):
 		UI_instrument_notes = float(settings['inst1']);		UI_onset_threshold = float(settings['busy']);
 		UI_instrument_chords = float(settings['inst2']);	UI_dynamic_threshold = float(settings['dyn']);
 		UI_instrument_beats = float(settings['inst3']);		UI_beat_windowSize = float(settings['window']); #300 msec
@@ -79,7 +82,7 @@ while(True):
 			utils.clean(settings['filename'])
 			break;
 
-
+	cmd = raw_input('\nWhat would you like to do? (-help)\n')
 
 
 

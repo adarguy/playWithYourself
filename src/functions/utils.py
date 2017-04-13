@@ -14,22 +14,23 @@ def help():
     
     print ("\nThe valid COMMANDS are:\n" #Command Description
     "load <filename>            -- to read in a wav audio file\n"
-    "save <filename>            -- to save back to a different file\n"
+    "save <filename> <path>     -- to save accompaniment to specified location\n"
+    "diagnostics <toggle>       -- to report diagnostics on the input audio file during processing (specify before loading file)\n"
+    "savesettings               -- to save back to a different file\n"
+    "printcontrols              -- print user/default settings for accompaniment <n>\n"
     "help                       -- to display this help message\n"
-    "quit                       -- to exit the program\n"
-    "stats                      -- to report diagnostics on the input audio file during processing (specify before loading file)\n"
-    "printcontrols              -- print user/default settings for accompaniment <n>\n")
+    "quit                       -- to exit the program\n")
     
     print ("\nThe valid USER INPUTS are:\n" #Parameter Description
-    "Busyness <n>               -- Onset (beat) threshold\n"
-    "Dynamics <n>               -- Dynamics threshold\n"
+    "Busyness <num>             -- Onset (beat) threshold\n"
+    "Dynamics <num>             -- Dynamics threshold\n"
     "Window <size>              -- Beat Correction Window Size\n"
     "Instrument 1 <name>        -- Instrument for Melodic Accompaniment\n"
     "Instrument 2 <name>        -- Instrument for Harmonic Accompaniment\n"
     "Instrument 3 <name>        -- Instrument for Percussive Accompaniment\n"
     "Pattern <genre>            -- Pattern for Percussive Accompaniment\n"
     "Chord Style <style>        -- Closed or Open Chords for Harmonic Accompaniment\n"
-    "Time Signature <n>         -- Chosen Time Signature (3/4 or 4/4 only)\n")
+    "Time Signature <num>       -- Chosen Time Signature (3/4 or 4/4 only)\n")
 
     print ("\nThe valid INSTRUMENT INPUTS are:\n" #Parameter Description
     "Piano                      -- General MIDI Acoustic Piano\n"
@@ -185,12 +186,15 @@ def get_arguments(f, dic):
 
     return dic
 
-def process_arguments(args, UI_show):
-    UI_show = False; dic = {}
+def process_arguments(args, UI_show, settings):
+    dic = settings
     try:
-        cmd, param = args.split()
+        cmd, param1, param2 = args.split()
     except:
-        cmd = args
+        try:
+            cmd, param = args.split()
+        except:
+            cmd = args
     if (cmd == 'load'):
         try:
             filename = param;
@@ -199,31 +203,41 @@ def process_arguments(args, UI_show):
                 dic['filename'] = filename
             else:
                 print "File does not exist or is corrupt."
-                return 0
+                return cmd, UI_show, dic
         except:
             print "no file specified"
-            return 0
+            return cmd, UI_show, dic
 
         logging.captureWarnings(not UI_show)
         dic = get_arguments(filename, dic)
 
         print "...Opening '" + ntpath.basename(dic['filename']) + "'"
-        return dic
     
-    elif (args == 'save'):
+    elif (cmd == 'save'):
         print "This piece of the program has not yet been implemented. The .mid file will be saved in the directory of the input audio file.\n"
-    elif (args == 'help'):
+    elif (cmd == 'help'):
         help()
-    elif (args == 'quit'):
+    elif (cmd == 'quit'):
         sys.exit()
-    elif (args == 'stats'):
-        UI_show = True
-    elif (args == 'printcontrols'):
-        print "...controls"
+    elif (cmd == 'diagnostics'):
+        try:
+            if (param == 'on'):
+                UI_show = True
+                print "Diagnostics are on"
+            else:
+                UI_show = False
+                print "Diagnostics are off"
+        except:
+            print "toggle (on/off) not specified"
+            return cmd, UI_show, dic
+    elif (cmd == 'printcontrols'):
+        print dic
+    elif (cmd == 'savesettings'):
+        save = True;
     else:
         print "Invalid Command. Type help for a list of valid commands"
 
-    return 0
+    return cmd, UI_show, dic
 
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
