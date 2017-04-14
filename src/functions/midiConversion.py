@@ -70,8 +70,8 @@ beat_list44 = {			0:[[42,35],[42],[42,38],[42]], #basic 2-beat
 						1:[[42,35],[42],[42,38],[42],[42,35],[42,35],[42,38],[42]], #basic rock beat 1
 						2:[[42,35],[42][42,38],[42,35],[42,35],[42],[42,38],[42]], #basic rock beat 2
 						3:[[42,35],[42],[42,38],[42],[42,35],[42,35],[42,38],[42,35],[42],[42,35],[42,38],[42],[42,35],[42,35],[42,38],[42]], #basic rock beat 3
-						4:[[42,35],[],[38],[],[42,35],[35],[42,38],[]], #basic punk beat 1
-						5:[[],[],[42],[42],[37],[],[42],[42],[35],[],[42],[42],[37],[],[42],[42]], #basic reggae - but this relies on the empty brackets being interpreted as rests by the system. Will it work that way? I need to hear it in action as well, but this pattern may need to be at double speed compared to the others
+						4:[[42,35],[0],[38],[0],[42,35],[35],[42,38],[0]], #basic punk beat 1
+						5:[[0],[0],[42],[42],[37],[0],[42],[42],[35],[0],[42],[42],[37],[0],[42],[42]], #basic reggae - but this relies on the empty brackets being interpreted as rests by the system. Will it work that way? I need to hear it in action as well, but this pattern may need to be at double speed compared to the others
 						}
 
 beat_list34 = {			0:[[42,35],[42],[42,38]],
