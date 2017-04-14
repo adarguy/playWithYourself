@@ -42,9 +42,13 @@ def getGenres():
 	return genres_list
 
 genres_programs = {
-						0:'rock',
-						1:'reggae',
-						2:'r&b'
+						0:'2-beat',
+						1:'rock 1',
+						2:'rock 2',
+						3:'rock 3',
+						4:'punk',
+						5:'reggae'
+
 }
 
 busy_list = {			1:'-the busiest!-',
