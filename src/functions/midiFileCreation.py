@@ -15,8 +15,10 @@ def write_midi_file(filename, midi_tracks, program, duration, tempo, volume):
 	MyMIDI = midiutil.MIDIFile(len(midi_tracks))
 	time = 0;
 	channel = 1
-	for i in range(len(midi_tracks)):
-		if (i == 2): channel = 10
+	for i in range(len(midi_tracks)):	
+		if (program[i]==128):
+			channel = 10
+			program[i] = 0
 		MyMIDI.addTempo(track=i+1, time=time, tempo=tempo)
 		MyMIDI.addProgramChange(track=i+1, channel=channel-1, time=time, program=program[i])
 		d = duration[i]; v = volume[i]

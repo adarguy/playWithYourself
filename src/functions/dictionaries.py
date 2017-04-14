@@ -38,14 +38,16 @@ def getTimeSig(num):
 def getInstruments():
 	return midi_inst
 
+def getGenres():
+	return genres_list
+
 genres_programs = {
 						0:'rock',
 						1:'reggae',
 						2:'r&b'
 }
 
-busy_list = {
-						1:'-the busiest!-',
+busy_list = {			1:'-the busiest!-',
 						2:'-damn busy-',
 						3:'-officially busy-',
 						4:'-gettin\' busy-',
@@ -56,8 +58,7 @@ busy_list = {
 						9:'-so NOT busy!-'
 }
 
-dyn_list = {
-						1:'-completely flat!-',
+dyn_list = {			1:'-completely flat!-',
 						2:'-almost gone-',
 						3:'-gettin\' flat-',
 						4:'-a lot of compression-',
@@ -69,8 +70,7 @@ dyn_list = {
 						10:'-full dynamic range-'
 }
 
-window_list = {
-						1:'-the tiniest!-',
+window_list = {			1:'-the tiniest!-',
 						2:'-very small-',
 						3:'-small-',
 						4:'-medium/small-',
@@ -81,43 +81,13 @@ window_list = {
 						9:'-so huge!-'
 }
 
-style_list = {
-						0:['closed', '-in various inversions-'],
+style_list = {			0:['closed', '-in various inversions-'],
 						1:['open', '-nicely spread chord-']
 }
 
-timesig_list = {
-						3:'-triple-',
+timesig_list = {		3:'-triple-',
 						4:'-quadruple-'
 }
-
-root_postion = {		'A':[[57,61,64]],
-						'Am':[[57,60,64]],
-						'Bb':[[58,62,65]],
-						'Bbm':[[58,61,65]],
-						'Bm':[[59,62,66]],
-						'B':[[59,63,66]],
-						'Bb':[[59,62,66]],
-						'C':[[60,64,67]],
-						'Cm':[[60,63,67]],
-						'C#':[[61,65,68]],
-						'Dbm':[[61,64,68]],
-						'D':[[62,66,69]],
-						'Dm':[[62,65,69]],
-						'Eb':[[63,67,70]],
-						'Ebm':[[63,66,70]],
-						'E':[[64,68,71]],
-						'Em':[[64,67,71]],
-						'F':[[65,69,72]],
-						'Fm':[[65,68,72]],
-						'F#':[[66,70,73]],
-						'F#m':[[66,69,73]],
-						'F#':[[66,70,73]],
-						'F#m':[[66,69,73]],
-						'G':[[67,71,74]],
-						'Gm':[[67,70,74]],
-						'Ab':[[68,72,75]],
-						'Abm':[[68,69,75]]}
 
 midi_inst = {			0:'Acoustic Grand Piano',
 					    1:'Bright Acoustic Piano',

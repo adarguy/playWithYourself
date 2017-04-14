@@ -4,12 +4,6 @@ import numpy as np
 
 import dictionaries
 
-def fmtcols(mylist, cols):
-    maxwidth = max(map(lambda x: len(x), mylist))
-    justifyList = map(lambda x: x.ljust(maxwidth), mylist)
-    lines = (' '.join(justifyList[i:i+cols]) for i in xrange(0,len(justifyList),cols))
-    return "\n".join(lines)
-
 def instruments():
     inst_list = dictionaries.getInstruments().values()
     print "\nValid MIDI instrument options are:\n"
@@ -49,49 +43,13 @@ def help():
     "  -Chord Style- <style>      -- chord style for harmonic accompaniment (closed or open)\n"
     "  -Time Signature- <num>     -- time signature for accompaniment (3/4 or 4/4 only)\n")
 
-def convert_settings(s):
-    final = {}
-    try:
-        y, sr = librosa.load(settings[0])
-        final['filename'] = settings[0]
-        final['y'] = y
-        final['sr'] = sr
-    except:
-        print "File does not exist or is corrupt"
-        return 0
-
-    final['busy'] = float(settings[1])/10
-    final['dyn'] = float(settings[2])/10
-    try:
-        final['window'] = float(settings[3])/10
-    except:
-        if (settings[3] == 'xs'):
-            final['window'] = 0.1
-        elif (settings[3] == 's'):
-            final['window'] = 0.3
-        elif (settings[3] == 'm'):
-            final['window'] = 0.5
-        elif (settings[3] == 'l'):
-            final['window'] = 0.7
-        elif (settings[3] == 'xl'):
-            final['window'] = 0.9
-        else:
-            print "Invalid user input. Try Again"
-            return 0
-
-        UI_instrument_notes = float(settings[4]);   UI_onset_threshold = float(settings[1]);
-        UI_instrument_chords = float(settings[5]);  UI_dynamic_threshold = float(settings[2]);
-        UI_instrument_beats = float(settings[6]);   UI_beat_windowSize = float(settings[3]); #300 msec
-        UI_beat_pattern = float(settings[7]);       UI_chord_style = float(settings[8]);
-        UI_time_signature = float(settings[9]);     
-
 def get_arguments(f, dic, saved):
     while (True):
         if (saved == True):
-            config = raw_input('\nWould you like to use default settings, saved settings or configure manually?\n')
+            config = raw_input('\nWould you like to use default settings, saved settings or a manual configuration?\n')
             config = config.lower()
         else:
-            config = raw_input('\nWould you like to use default settings or configure manually?\n')
+            config = raw_input('\nWould you like to use default settings or a manual configuration?\n')
             config = config.lower()
         
         if (config == 'default' or config == 'manual'):
@@ -172,15 +130,16 @@ def get_arguments(f, dic, saved):
                         try:
                             cont = raw_input('Would you like to continue with this choice?')
                             try:
-                                assert cont == 'yes'   
+                                assert cont == 'yes' 
+                                inst += 1000  
                             except:
                                 assert cont == 'no'
-                                good = False;
+                                good = False
                             break;
                         except:
                             print "Invalid input. Must be either yes or no."
                 dic['inst3'] = inst
-                if (good): break;
+                if (good): break
             except:
                 print "Input is not in the list of valid instruments. Type help for a list of valid instruments."
 
@@ -233,7 +192,7 @@ def process_arguments(args, UI_show, settings, save):
                 dic['filename'] = filename
                 logging.captureWarnings(not UI_show)
                 dic = get_arguments(filename, dic, save)               
-                print "...Opening '" + ntpath.basename(dic['filename']) + "'"
+                print "\n...Opening '" + ntpath.basename(dic['filename']) + "'"
                 cmd += '_yes'
             else:
                 print "\nFile does not exist or is corrupt."
@@ -290,29 +249,7 @@ def process_arguments(args, UI_show, settings, save):
     
     return cmd, UI_show, dic, save
 
-def default_settings(dic):
-    dic['busy'] = 0.1
-    dic['dyn'] = 0.7
-    dic['window'] = 0.3
-    dic['inst1'] = 35
-    dic['inst2'] = 0
-    dic['inst3'] = 128
-    dic['pattern'] = 0
-    dic['style'] = 0
-    dic['timeSig'] = 4
-    dic['default'] = True
-    return dic
-
-def set_defaults():
-    UI_show = False; save = False; settings = {}
-    settings = default_settings(settings)
-    return UI_show, settings, save
-
-def find_nearest(array,value):
-    idx = (np.abs(array-value)).argmin()
-    return array[idx], idx
-
-def preview(filename):
+def preview(filename, length):
     FNULL = open(os.devnull, 'w')
     subprocess.call(['fluidsynth', '-T', 'wav', '-F', filename[:-4]+'.raw', '-ni', '../lib/sf2/sf.sf2', filename[:-4]+'.mid', '-g', '0.8', '-r', '22050'], stdout=FNULL, stderr=subprocess.STDOUT)
     subprocess.call(['SoX', '-t', 'raw', '-r', '22050','-e', 'signed', '-b', '16', '-c', '1', filename[:-4]+'.raw', filename[:-4]+'_temp.wav'])
@@ -324,8 +261,7 @@ def preview(filename):
     mixed[:len(frames1)] += frames1 / 2
     mixed[:len(frames2)] += frames2 / 2
 
-    audiolab.play(mixed[:len(mixed)/4], fs=44100)
-    
+    audiolab.play(mixed[:len(mixed)*length], fs=44100)
     
 def clean(filename):
     while (True):
@@ -344,4 +280,23 @@ def clean(filename):
             else: assert result==('yes'or'no')
         except:
             print "Invalid input. Must be either yes or no."
-    
+
+def set_defaults():
+    UI_show = False; save = False; settings = {}
+    settings['busy'] = 0.1;     settings['inst1'] = 32
+    settings['dyn'] = 0.7;      settings['inst2'] = 0; 
+    settings['window'] = 0.3;   settings['inst3'] = 128
+         
+    settings['pattern'] = 0;    settings['style'] = 0
+    settings['timeSig'] = 4;    settings['default'] = True
+    return UI_show, settings, save
+
+def fmtcols(mylist, cols):
+    maxwidth = max(map(lambda x: len(x), mylist))
+    justifyList = map(lambda x: x.ljust(maxwidth), mylist)
+    lines = (' '.join(justifyList[i:i+cols]) for i in xrange(0,len(justifyList),cols))
+    return "\n".join(lines)
+
+def find_nearest(array,value):
+    idx = (np.abs(array-value)).argmin()
+    return array[idx], idx
