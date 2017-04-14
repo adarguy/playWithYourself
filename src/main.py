@@ -12,27 +12,26 @@ import midiutil
 # IMPORT OUR MIR FUNCTIONS
 sys.path.append('functions')
 import utils
+import dictionaries
 import beatDetection
 import chordPrediction
 import midiConversion
 import midiFileCreation
 
 
-show_diagnostics = False
-settings = {}
-save = False
+show_diagnostics, settings, save = utils.set_defaults()
+print(	'\nWelcome to Play With Yourself Accompaniment Tool.'
+		'\nType help for a list of valid commands')
 
-cmd = raw_input('\nWelcome to Play With Yourself Accompaniment Tool.\nWhat would you like to do? (-help)\n') 
 while(True):
-	# OPEN FILE
-	cmd, show_diagnostics, settings = utils.process_arguments(cmd, show_diagnostics, settings);
-
-	if (cmd == 'load'):
-		UI_instrument_notes = float(settings['inst1']);		UI_onset_threshold = float(settings['busy']);
-		UI_instrument_chords = float(settings['inst2']);	UI_dynamic_threshold = float(settings['dyn']);
-		UI_instrument_beats = float(settings['inst3']);		UI_beat_windowSize = float(settings['window']); #300 msec
-		UI_beat_pattern = float(settings['pattern']);		UI_chord_style = float(settings['style']);
-		UI_time_signature = float(settings['timeSig']);		y, sr = librosa.load(settings['filename'])
+	cmd = raw_input('\nWhat would you like to do?\n')
+	cmd, show_diagnostics, settings, save = utils.process_arguments(cmd, show_diagnostics, settings, save);
+	if (cmd == 'load_yes'):
+		UI_instrument_notes = float(settings['inst1']);			UI_onset_threshold = float(settings['busy']);
+		UI_instrument_chords = float(settings['inst2']);		UI_dynamic_threshold = float(settings['dyn']);
+		UI_instrument_beats = float(settings['inst3'])%128;		UI_beat_windowSize = float(settings['window']); #300 msec
+		UI_beat_pattern = float(settings['pattern']);			UI_chord_style = float(settings['style']);
+		UI_time_signature = float(settings['timeSig']);			y, sr = librosa.load(settings['filename'])
 
 
 
@@ -76,17 +75,5 @@ while(True):
 
 
 		# PREVIEW
-		happy = utils.preview(settings['filename'])
-
-		if (happy):
-			utils.clean(settings['filename'])
-			break;
-
-	cmd = raw_input('\nWhat would you like to do? (-help)\n')
-
-
-
-
-
-
-
+		utils.preview(settings['filename'])
+		utils.clean(settings['filename'])
