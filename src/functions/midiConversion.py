@@ -66,11 +66,21 @@ Should probably just be labeled "chord_list" now,
 but I don't want to change the name without knowing all of the places it's being called.
 """
 
-beat_list44 = {			0:[[42,35],[42],[42,38],[42]],
-						1:[[42,35],[42],[42,38],[42]]}
+beat_list44 = {			0:[[42,35],[42],[42,38],[42]], #basic 2-beat
+						1:[[42,35],[42],[42,38],[42],[42,35],[42,35],[42,38],[42]], #basic rock beat 1
+						2:[[42,35],[42][42,38],[42,35],[42,35],[42],[42,38],[42]], #basic rock beat 2
+						3:[[42,35],[42],[42,38],[42],[42,35],[42,35],[42,38],[42,35],[42],[42,35],[42,38],[42],[42,35],[42,35],[42,38],[42]], #basic rock beat 3
+						4:[[42,35],[],[38],[],[42,35],[35],[42,38],[]], #basic punk beat 1
+						5:[[],[],[42],[42],[37],[],[42],[42],[35],[],[42],[42],[37],[],[42],[42]], #basic reggae - but this relies on the empty brackets being interpreted as rests by the system. Will it work that way? I need to hear it in action as well, but this pattern may need to be at double speed compared to the others
+						}
 
 beat_list34 = {			0:[[42,35],[42],[42,38]],
-						1:[[42,35],[42],[42,38]]}
+						1:[[42,35],[42,38],[42,38]],
+						2:[[42,35],[42],[42,38],[42,35],[42,35],[42,38]]
+						3:[[42,35],[42],[42],[42,35],[42,38],[42,35],[42,35],[42],[42,35],[42],[42,38],[42]]
+						4:[[42,35],[42],[42],[42,35],[42,38],[42],[42,35],[42],[42,35],[42],[42,38],[42]]
+						5:[[42,35],[42],[42],[42,38],[42],[42],[42,35],[42],[42,35],[42,38],[42],[42,35]]
+						}
 
 def convert_note_to_midi(notes, reg):
 	print "...Converting notes to MIDI values"
