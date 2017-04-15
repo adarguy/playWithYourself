@@ -1,6 +1,6 @@
 def instToPrgNum(inst):
-	midi_programs = dict((b, a) for a,b in midi_inst.iteritems())
-	return midi_programs[inst]
+	midi_programs = dict((b.lower(), a) for a,b in midi_inst.iteritems())
+	return midi_programs[inst.lower()]
 
 def prgNumToInst(num, p):
 	if ((p==1 and num==35) or (p==2 and num==0) or (p==3 and num==128)):
@@ -8,8 +8,8 @@ def prgNumToInst(num, p):
 	return midi_inst[num]
 
 def genreToPrgNum(genre):
-	genres_list = dict((b, a) for a,b in genres_programs.iteritems())
-	return genres_list[genre]
+	genres_list = dict((b.lower(), a) for a,b in genres_programs.iteritems())
+	return genres_list[genre.lower()]
 
 def prgNumToGenre(num):
 	if (num==0):
@@ -41,6 +41,16 @@ def getInstruments():
 def getGenres():
 	return genres_list
 
+def speedToPrgNum(speed):
+	return scale_tempo[speed]
+
+scale_tempo = {
+						'half':0.5,
+						'regular':1.0, 
+						'double':2.0,
+						'quadruple':3.0,
+}
+
 genres_programs = {
 						0:'2-beat',
 						1:'rock 1',
@@ -48,7 +58,6 @@ genres_programs = {
 						3:'rock 3',
 						4:'punk',
 						5:'reggae'
-
 }
 
 busy_list = {			1:'-the busiest!-',

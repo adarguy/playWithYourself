@@ -4,8 +4,21 @@ import matplotlib.pyplot as plt
 
 import utils
 
-def alter_beats(s, e, msec_tempo, UI_window):
-	a = [s[0]]; b = []
+def drum_tempo(s, e, t, v):
+	l = np.array(s)
+	l = (l[1:]+l[:-1])/2
+	x = []
+	for i in range(len(l)):
+		x.append(s[i])
+		x.append(l[i])
+	x.append(s[-1])
+	e = x[1:]; s = x
+	v = np.repeat(v, t)
+	return s, e, v
+
+
+def alter_beats(s, e, v, msec_tempo, UI_window, speed):
+	a = [s[0]]; b = []; v = list(v)
 	for i in range(len(e)):
 		est_next_beat = round(s[0] + (msec_tempo*(i+1)), 3)
 		near_e, idx_e = utils.find_nearest(e, est_next_beat)
@@ -20,7 +33,17 @@ def alter_beats(s, e, msec_tempo, UI_window):
 		else:
 			a.append(est_next_beat)
 			b.append(est_next_beat)
-	return a, b
+
+	if (speed>1):
+		for i in range(int(speed)-1):
+			a, b, v = drum_tempo(a, b, speed, v)
+	elif (speed>0 and speed<1):
+		del a[1::int(1/speed)]
+		del b[::int(1/speed)]
+		del v[1::int(1/speed)]
+		b.append(e[-1])
+		v = np.append(v, v[-1]*0.6)
+	return a, b, np.array(v)
 
 def plot_beats_and_onsets(onsets, beats, times, show):
 	if (not show): return times

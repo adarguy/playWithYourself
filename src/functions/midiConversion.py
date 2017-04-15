@@ -80,7 +80,7 @@ open_chord_list = {		'A':	[[25,33,40],[33,40,49],[37,45,52]],
 
 beat_list44 = {			0:[[42,35],[42],[42,38],[42]], #basic 2-beat
 						1:[[42,35],[42],[42,38],[42],[42,35],[42,35],[42,38],[42]], #basic rock beat 1
-						2:[[42,35],[42][42,38],[42,35],[42,35],[42],[42,38],[42]], #basic rock beat 2
+						2:[[42,35],[42],[42,38],[42,35],[42,35],[42],[42,38],[42]], #basic rock beat 2
 						3:[[42,35],[42],[42,38],[42],[42,35],[42,35],[42,38],[42,35],[42],[42,35],[42,38],[42],[42,35],[42,35],[42,38],[42]], #basic rock beat 3
 						4:[[42,35],[0],[38],[0],[42,35],[35],[42,38],[0]], #basic punk beat 1
 						5:[[0],[0],[42],[42],[37],[0],[42],[42],[35],[0],[42],[42],[37],[0],[42],[42]], #basic reggae - but this relies on the empty brackets being interpreted as rests by the system. Will it work that way? I need to hear it in action as well, but this pattern may need to be at double speed compared to the others
@@ -88,9 +88,9 @@ beat_list44 = {			0:[[42,35],[42],[42,38],[42]], #basic 2-beat
 
 beat_list34 = {			0:[[42,35],[42],[42,38]],
 						1:[[42,35],[42,38],[42,38]],
-						2:[[42,35],[42],[42,38],[42,35],[42,35],[42,38]]
-						3:[[42,35],[42],[42],[42,35],[42,38],[42,35],[42,35],[42],[42,35],[42],[42,38],[42]]
-						4:[[42,35],[42],[42],[42,35],[42,38],[42],[42,35],[42],[42,35],[42],[42,38],[42]]
+						2:[[42,35],[42],[42,38],[42,35],[42,35],[42,38]],
+						3:[[42,35],[42],[42],[42,35],[42,38],[42,35],[42,35],[42],[42,35],[42],[42,38],[42]],
+						4:[[42,35],[42],[42],[42,35],[42,38],[42],[42,35],[42],[42,35],[42],[42,38],[42]],
 						5:[[42,35],[42],[42],[42,38],[42],[42],[42,35],[42],[42,35],[42,38],[42],[42,35]]
 }
 
@@ -112,15 +112,16 @@ def convert_chord_to_midi(chords, reg, style):
 			midi_chords.append(open_chord_list[chords[i]][(int(reg[i]))%len(closed_chord_list[chords[i]])])
 	return midi_chords
 
-def convert_beat_to_midi(beats, pattern, time_sig, inst, reg):
+def convert_beat_to_midi(beats, pattern, time_sig, inst, reg, speed):
 	print "...Converting beats to MIDI values"
 	midi_beats = [[0]]
 	if (inst == 128):
-		for i in range(len(beats)):
+		for i in range(int(len(beats)*speed)-int(speed)):
 			if (time_sig == 4):
 				midi_beats.append(beat_list44[pattern][i%len(beat_list44[int(pattern)])])
 			else:
 				midi_beats.append(beat_list34[pattern][i%len(beat_list34[int(pattern)])])
+		midi_beats.append([49,51]) # the last drum hit is crash and ride
 	else:
 		midi_beats = convert_note_to_midi(beats, reg)
 	return midi_beats

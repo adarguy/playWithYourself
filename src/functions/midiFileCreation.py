@@ -17,14 +17,13 @@ def write_midi_file(filename, midi_tracks, program, duration, tempo, volume):
 	channel = 1
 	for i in range(len(midi_tracks)):	
 		if (program[i]==128):
-			channel = 10
-			program[i] = 0
+			channel = 10; program[i] = 0
 		MyMIDI.addTempo(track=i+1, time=time, tempo=tempo)
 		MyMIDI.addProgramChange(track=i+1, channel=channel-1, time=time, program=program[i])
 		d = duration[i]; v = volume[i]
 		for j, midi_note in enumerate(midi_tracks[i]):
 			for k in range(len(midi_note)):
-					MyMIDI.addNote(i, channel-1, midi_note[k], time, d[j], v[j])
+				MyMIDI.addNote(i, channel-1, midi_note[k], time, d[j], v[j])
 			time = sum(d[:j+1])
 		time = 0
 
