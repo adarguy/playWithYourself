@@ -24,10 +24,7 @@ def alter_beats(s, e, v, msec_tempo, UI_window, speed):
 		near_e, idx_e = utils.find_nearest(e, est_next_beat)
 		near_s, idx_s = utils.find_nearest(s, est_next_beat)
 
-		if (est_next_beat >= e[-1]):
-			b.append(e[-1])
-			break;
-		elif ((abs(est_next_beat - near_e) < UI_window)):
+		if ((abs(est_next_beat - near_e) < UI_window)):
 			a.append(near_e)
 			b.append(near_e)
 		else:

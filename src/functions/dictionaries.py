@@ -3,7 +3,7 @@ def instToPrgNum(inst):
 	return midi_programs[inst.lower()]
 
 def prgNumToInst(num, p):
-	if ((p==1 and num==35) or (p==2 and num==0) or (p==3 and num==128)):
+	if ((p==1 and num==32) or (p==2 and num==0) or (p==3 and num==128)):
 		return midi_inst[num]+' (default)'
 	return midi_inst[num]
 
@@ -17,12 +17,18 @@ def prgNumToGenre(num):
 	return genres_programs[num]
 
 def getBusy(num):
+	if (num==9):
+		return busy_list[num]+ ' (default)'
 	return busy_list[num]
 
 def getDyn(num):
+	if (num==7):
+		return dyn_list[num]+ ' (default)'
 	return dyn_list[num]
 
 def getWindow(num):
+	if (num==3):
+		return window_list[num]+ ' (default)'
 	return window_list[num]
 
 def getStyle(num, p):
@@ -35,14 +41,14 @@ def getTimeSig(num):
 		return timesig_list[num]+' (default)'
 	return timesig_list[num]
 
-def getInstruments():
-	return midi_inst
-
-def getGenres():
-	return genres_list
-
 def speedToPrgNum(speed):
 	return scale_tempo[speed]
+
+def getInstruments():
+	return midi_inst.values()
+
+def getGenres():
+	return genres_programs.values()
 
 scale_tempo = {
 						'half':0.5,
@@ -60,15 +66,15 @@ genres_programs = {
 						5:'reggae'
 }
 
-busy_list = {			1:'-the busiest!-',
-						2:'-damn busy-',
-						3:'-officially busy-',
-						4:'-gettin\' busy-',
+busy_list = {			9:'-the busiest!-',
+						8:'-damn busy-',
+						7:'-officially busy-',
+						6:'-gettin\' busy-',
 						5:'-in the middle-',
-						6:'-chillin out-',
-						7:'-gettin\' lazy-',
-						8:'-probably missed a few-',
-						9:'-so NOT busy!-'
+						4:'-chillin out-',
+						3:'-gettin\' lazy-',
+						2:'-probably missed a few-',
+						1:'-so NOT busy!-'
 }
 
 dyn_list = {			1:'-completely flat!-',

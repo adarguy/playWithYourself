@@ -27,9 +27,9 @@ while(True):
 	cmd = raw_input('\nWhat would you like to do?\n')
 	cmd, show_diagnostics, settings, save = utils.process_command(cmd, show_diagnostics, settings, save);
 	if (cmd == 'load_yes'):
-		UI_instrument_notes = int(settings['inst1']);			UI_onset_threshold = float(settings['busy']);
-		UI_instrument_chords = int(settings['inst2']);			UI_dynamic_threshold = float(settings['dyn']);
-		UI_instrument_beats = int(settings['inst3']);			UI_beat_windowSize = float(settings['window']); #300 msec
+		UI_instrument_notes = int(settings['inst1']);			UI_onset_threshold = float((10-int(settings['busy']))/10.0);
+		UI_instrument_chords = int(settings['inst2']);			UI_dynamic_threshold = float(settings['dyn']/10.0);
+		UI_instrument_beats = int(settings['inst3']);			UI_beat_windowSize = float(settings['window']/10.0); #300 msec
 		UI_beat_pattern = int(settings['pattern']);				UI_chord_style = int(settings['style']);
 		UI_time_signature = int(settings['timeSig']);			y, sr = librosa.load(settings['filename'])
 

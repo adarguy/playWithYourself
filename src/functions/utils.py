@@ -5,16 +5,12 @@ import numpy as np
 import dictionaries
 
 def instruments():
-    inst_list = dictionaries.getInstruments().values()
+    inst_list = dictionaries.getInstruments()
+    genre_list = dictionaries.getGenres()
     print "\nValid MIDI instrument options are:"
     print fmtcols(inst_list, 4)
-    print ( "\nValid genre options are:\n"
-            "2-Beat\n"
-            "Rock 1\n"
-            "Rock 2\n"
-            "Rock 3\n"
-            "Punk\n"
-            "Reggae\n")
+    print "\nValid Percussive MIDI instrument options are:"
+    print fmtcols(genre_list, 1)
 
 
 def help():
@@ -61,7 +57,7 @@ def get_settings(f, dic, saved):
         if (saved == True):
             config = raw_input("\nWould you like to use default settings, saved settings or a manual configuration? Type 'manual advanced' for more options.\n")
         else:
-            config = raw_input("\nWould you like to use default settings or a manual configuration?Type 'manual advanced' for more options.\n") 
+            config = raw_input("\nWould you like to use default settings or a manual configuration? Type 'manual advanced' for more options.\n") 
         try:
             config, advanced = config.lower().split()
             if (advanced != 'advanced'): 
@@ -149,8 +145,7 @@ def get_settings(f, dic, saved):
             try:
                 settings[1] = int(settings[1])
                 if (settings[1] <= 9 and settings[1] >= 1):
-                    settings[1] = 10-settings[1]
-                    dic['busy'] = settings[1]/10.0
+                    dic['busy'] = settings[1]
                     break;
                 else: print "Input is not between 1 - 9."
             except:
@@ -215,7 +210,6 @@ def get_settings(f, dic, saved):
         dic['default'] = False
     elif (config == "default"):
         UI_show, dic, save = set_defaults(dic)
-
     return dic
 
 def process_command(args, UI_show, settings, save):
@@ -270,9 +264,9 @@ def process_command(args, UI_show, settings, save):
             except:
                 assert param.lower() == 'print'
                 if (save):
-                    print "Busyness: "+str(int(dic['busy']*10))+" "+dictionaries.getBusy(int(dic['busy']*10))
-                    print "Dynamics: "+str(int(dic['dyn']*10))+" "+dictionaries.getDyn(int(dic['dyn']*10))
-                    print "Window Size: "+str(int(dic['window']*10))+" "+dictionaries.getWindow(int(dic['window']*10))
+                    print "Busyness: "+str(int(dic['busy']))+" "+dictionaries.getBusy(int(dic['busy']))
+                    print "Dynamics: "+str(int(dic['dyn']))+" "+dictionaries.getDyn(int(dic['dyn']))
+                    print "Window Size: "+str(int(dic['window']))+" "+dictionaries.getWindow(int(dic['window']))
                     
                     print "Instrument 1: "+dictionaries.prgNumToInst(int(dic['inst1']), 1)+" -melodic-"
                     print "Instrument 2: "+dictionaries.prgNumToInst(int(dic['inst2']), 2)+" -harmonic-"
@@ -327,9 +321,9 @@ def clean(filename):
 
 def set_defaults(settings={}):
     UI_show = False; save = False;
-    settings['busy'] = 0.1;     settings['inst1'] = 32
-    settings['dyn'] = 0.7;      settings['inst2'] = 0; 
-    settings['window'] = 0.3;   settings['inst3'] = 128
+    settings['busy'] = 9;     settings['inst1'] = 32
+    settings['dyn'] = 7;      settings['inst2'] = 0; 
+    settings['window'] = 3;   settings['inst3'] = 128
          
     settings['pattern'] = 0;    settings['style'] = 0
     settings['timeSig'] = 4;    settings['default'] = True
