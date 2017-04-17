@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Play With Yourself - Accompaniment Tool</title>
+            
+    
+    </head>
+    
+    <body>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://localhost:5000">Play With Yourself</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#/">MIR</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
+                            <ul class="dropdown-menu navbar-custom">
+                                <li><a href="#/">>...</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#/">>...</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#/">...</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Us <span class="caret"></span></a>
+                            <ul class="dropdown-menu navbar-custom">
+                                <li><a href="#/">Who are We?</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#/">>Contact Us</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#/">FAQs</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+
+        <!-- TITLE -->
+        <div class="container classWithPad">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                    <h1>Play With Yourself</h1>
+                    <p class="lead">An accompaniment tool for the modern musician using:
+                        <ul class="list-unstyled">
+                            <li>Librosa</li>
+                            <li>Pymir</li>
+                            <li>Many other things...</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Get File -->
+        <div class="container classWithPad">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-sm-12 col-xs-12 col-center text-center">
+                    <a type="button" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-center btn btn-info" href="#" data-reveal-id="myModal">Preview Result</a>
+                    <a type="button" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-center btn btn-success" href="http://localhost:5000">Start Again</a>
+                    <a type="button" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-center btn btn-warning" onclick="alert('Sorry. This has not yet been implemented')">Debug Accompaniment</a>
+                    <br><br>
+                    <a type="button" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-center btn btn-primary" href="{{filename}}.mid" download="{{filename}}.mid">Download MIDI File</a>
+                    <a type="button" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-center btn btn-primary" href="{{filename}}_midi.wav" download="{{filename}}_midi.wav">Download wav File</a>
+                    <a type="button" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 col-center btn btn-primary" href="{{filename}}_mix.wav" download="{{filename}}_mix.wav">Download wav of Mix</a>                 
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="reveal-modal" data-reveal="" aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="display: none; opacity: 1; visibility: hidden; top: 260px; width:515; background:#000;">
+            <audio src="{{filename}}_mix.wav" preload="auto"></audio>
+            <div class="track-details">{{filename}} <em> --Mix</em></div>
+        </div>
+    </body>
+
+    <!-- jQuery Version 1.11.1 -->
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    
+    <!-- Bootstrap Core CSS -->
+    <link rel=stylesheet type=text/css href="../css/bootstrap.min.css">
+    <link rel=stylesheet type=text/css href="../css/bootstrap-slider.min.css">
+    <link rel=stylesheet type=text/css href="../css/modal.css" >
+    <link rel=stylesheet type=text/css href="../css/style.css">
+    
+    <!-- Bootstrap Core JavaScript --> 
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-slider.min.js"></script>
+    <script type="text/javascript" src="../js/audio.js"></script>
+    <script type="text/javascript" src="../js/modal.js"></script> 
+    <script type="text/javascript" src="../js/function.js"></script>
+    
+</html>
+
