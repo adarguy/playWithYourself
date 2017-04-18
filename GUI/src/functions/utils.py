@@ -2,8 +2,14 @@ import logging, subprocess, os, shutil
 import scikits.audiolab as audiolab
 from scipy.io.wavfile import write
 import numpy as np
+from scipy.io.wavfile import read, write
+import wave, pyaudio, librosa
 
 import dictionaries
+
+
+
+
 
 init = True
 
@@ -49,18 +55,17 @@ def preview(filename, directory):
     print '...Previewing Accompaniment'
     FNULL = open(os.devnull, 'w')
     subprocess.call(['fluidsynth', '-T', 'wav', '-F', directory+"/"+filename[:-4]+'.raw', '-ni', directory[:-10]+'lib/sf2/sf.sf2', directory+"/"+filename[:-4]+'.mid', '-g', '0.8', '-r', '22050'], stdout=FNULL, stderr=subprocess.STDOUT)
-    subprocess.call(['SoX', '-t', 'raw', '-r', '44100','-e', 'signed', '-b', '16', '-c', '1', directory+"/"+filename[:-4]+'.raw', directory+"/"+filename[:-4]+'_midi.wav'])
+    subprocess.call(['SoX', '-t', 'raw', '-r', '22050','-e', 'signed', '-b', '16', '-c', '1', directory+"/"+filename[:-4]+'.raw', directory+"/"+filename[:-4]+'_midi.wav'])
     
-    frames1, fs1, encoder1 = audiolab.wavread(directory+"/"+filename[:-4]+'_midi.wav')
-    frames2, fs2, encoder2 = audiolab.wavread(directory+"/"+filename)
+    y, sr = librosa.load(directory+"/"+filename)
+    z, sr2 = librosa.load(directory+"/"+filename[:-4]+'_midi.wav')
+    y = librosa.resample(y,sr,sr*2)
+    mix = np.zeros(max(len(y), len(z)), dtype=float)
+    mix[:len(y)] += y / 2
+    mix[:len(z)] += z / 2
+    mix = np.int16(mix/np.max(np.abs(mix)) * 16383)
+    write(directory+"/"+filename[:-4]+'_mix.wav', 44100, mix)
 
-    mixed = np.zeros(max(len(frames1), len(frames2)), dtype=frames1.dtype)
-    mixed[:len(frames1)] += frames1 / 2
-    mixed[:len(frames2)] += frames2 / 2
-
-    scaled = np.int16(mixed/np.max(np.abs(mixed)) * 16383)
-    write(directory+"/"+filename[:-4]+'_mix.wav', 44100, scaled)
-    
 def clean(directory):
     global init
     if (init):
