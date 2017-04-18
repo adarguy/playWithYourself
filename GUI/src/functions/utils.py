@@ -1,6 +1,4 @@
 import logging, subprocess, os, shutil
-import scikits.audiolab as audiolab
-from scipy.io.wavfile import write
 import numpy as np
 from scipy.io.wavfile import read, write
 import wave, pyaudio, librosa

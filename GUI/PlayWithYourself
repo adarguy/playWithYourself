@@ -59,58 +59,42 @@ if [ $cmd == "install" ]; then
 							    echo FAIL
 							else
 							    echo 'pyaudio install successful'
-							    # Install scikits.audiolab (requires libsndfile)
-								brew install libsndfile
-								libsndfiletest=$?
-								if [ $libsndfiletest -eq 1 ]; then
+							    
+							    #sudo -H pip uninstall scikits.io.wavfile
+							    sudo -H pip install scipy
+								scipywavtest=$?
+								if [ $scipywavtest -eq 1 ]; then
 								    echo FAIL
 								else
-								    echo 'libsndfile install successful'
-								    #sudo -H pip uninstall scikits.io.wavfile
-								    sudo -H pip install scikits.io.wavfile
-									scikits.io.wavtest=$?
-									if [ $scikits.io.wavtest -eq 1 ]; then
+									echo 'scipy install successful'
+									# Install wave										sudo -H pip install wave
+									wavetest=$?
+									if [ $wavetest -eq 1 ]; then
 									    echo FAIL
 									else
-										echo 'scikits.io.wav install successful'
-										# Install sox and fluidsynth (for mixing)
-										sudo -H pip install pyaudio
-										pyaudiotest=$?
-										if [ $pyaudiotest -eq 1 ]; then
-											echo FAIL
+									    echo 'wave install successful'
+									    # Install sox and fluidsynth (for mixing)
+										brew install sox
+										soxtest=$?
+										if [ $soxtest -eq 1 ]; then
+										    echo FAIL
 										else
-											echo 'pyaudio install successful'
-											# Install sox and fluidsynth (for mixing)
-											sudo -H pip install wave
-											wavetest=$?
-											if [ $wavetest -eq 1 ]; then
+										    echo 'SoX install successful'
+										    brew install fluidsynth
+											fluidsynthtest=$?
+											if [ $fluidsynthtest -eq 1 ]; then
 											    echo FAIL
 											else
-											    echo 'wave install successful'
-											    # Install sox and fluidsynth (for mixing)
-												brew install sox
-												soxtest=$?
-												if [ $soxtest -eq 1 ]; then
+											    echo 'fluidsynth install successful'
+											    # Install flask (server host)
+												sudo -H pip install --ignore-installed flask
+												flasktest=$?
+												if [ $flasktest -eq 1 ]; then
 												    echo FAIL
 												else
-												    echo 'SoX install successful'
-												    brew install fluidsynth
-													fluidsynthtest=$?
-													if [ $fluidsynthtest -eq 1 ]; then
-													    echo FAIL
-													else
-													    echo 'fluidsynth install successful'
-													    # Install flask (server host)
-														sudo -H pip install --ignore-installed flask
-														flasktest=$?
-														if [ $flasktest -eq 1 ]; then
-														    echo FAIL
-														else
-														    echo 'flask install successful'
-														fi
-														echo 'Play With Yourself is ready to use'
-													fi
+												    echo 'flask install successful'
 												fi
+												echo 'Play With Yourself is ready to use'
 											fi
 										fi
 									fi
@@ -123,7 +107,7 @@ if [ $cmd == "install" ]; then
 		fi
 	fi	
 fi
-echo "Ok. Launching Play With Yourself"
+echo "Launching Play With Yourself"
 python $cwd/app.py
 
 
