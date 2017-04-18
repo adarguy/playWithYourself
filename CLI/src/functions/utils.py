@@ -1,6 +1,7 @@
 import argparse, warnings, logging, subprocess, sys, os, ntpath
-import scikits.audiolab as audiolab
 import numpy as np
+from scipy.io.wavfile import read, write
+import wave, pyaudio, librosa
 
 import dictionaries
 
@@ -291,15 +292,28 @@ def preview(filename, length):
     FNULL = open(os.devnull, 'w')
     subprocess.call(['fluidsynth', '-T', 'wav', '-F', filename[:-4]+'.raw', '-ni', '../lib/sf2/sf.sf2', filename[:-4]+'.mid', '-g', '0.8', '-r', '22050'], stdout=FNULL, stderr=subprocess.STDOUT)
     subprocess.call(['SoX', '-t', 'raw', '-r', '22050','-e', 'signed', '-b', '16', '-c', '1', filename[:-4]+'.raw', filename[:-4]+'_temp.wav'])
+
+    y, sr = librosa.load(filename)
+    z, sr2 = librosa.load(filename[:-4]+'_temp.wav')
+    y = librosa.resample(y,sr,sr*2)
+    mix = np.zeros(max(len(y), len(z)), dtype=float)
+    mix[:len(y)] += y / 2
+    mix[:len(z)] += z / 2
+    mix = np.int16(mix/np.max(np.abs(mix)) * 16383)
+    write(filename[:-4]+'_mix.wav', 44100, mix)
     
-    frames1, fs1, encoder1 = audiolab.wavread(filename[:-4]+'_temp.wav')
-    frames2, fs2, encoder2 = audiolab.wavread(filename)
-
-    mixed = np.zeros(max(len(frames1), len(frames2)), dtype=frames1.dtype)
-    mixed[:len(frames1)] += frames1 / 2
-    mixed[:len(frames2)] += frames2 / 2
-
-    audiolab.play(mixed[:len(mixed)*length], fs=44100)
+    wf = wave.open(filename[:-4]+'_mix.wav')
+    p = pyaudio.PyAudio()
+    chunk = 1024
+    stream = p.open(format =
+	                p.get_format_from_width(wf.getsampwidth()),
+	                channels = wf.getnchannels(),
+	                rate = wf.getframerate(),
+	                output = True)
+    data = wf.readframes(chunk)
+    for i in range(int(len(data)*length)):
+    	stream.write(data)
+    	data = wf.readframes(chunk)
     
 def clean(filename):
     while (True):
@@ -313,6 +327,7 @@ def clean(filename):
                 break;
             elif (result=='no'):
                 os.remove(filename[:-4]+'.mid')
+                os.remove(filename[:-4]+'_mix.wav')
                 print "OK. Lets start again."
                 break;
             else: assert result==('yes'or'no')
