@@ -38,7 +38,8 @@ $(document).ready(function() {
 
 });
 
-function show_hide(id){
+function show(id){
+    alert(id);
     if(document.getElementById(id).style.display == "none"){
         document.getElementById(id).style.display = "";
     }
@@ -47,22 +48,13 @@ function show_hide(id){
     }
 }
 
-function inst_show(){
-
-    d = document.getElementById('inst_list');
-    //if(d.classList.contains("hidden-xs")){
-    d.classList.remove("hidden-xs");
-    d.className += " col-xs-12";
-    //}
-    //else{
-    //    d.classList.remove("col-xs-12");
-    //    d.className += " hidden-xs";
-    //}
-}
-
 function clearInput(id){    
     document.getElementById("inst_box"+id).value= "";
-    showList(id);
+    document.getElementById("inst_list"+id).style.display = "inline-block";
+    var val = parseInt(id);
+    alert(String(val)+":"+String(3-val)+":"+String(val+(3-val)));
+    //document.getElementById("inst_list"+String(val%3)).style.display = "none";
+    //document.getElementById("inst_list"+String(3-val)).style.display = "none";
 }
 
 function noInput(id){    
@@ -75,7 +67,7 @@ function noInput(id){
 }
 
 function instrument_search(id) {
-    showList(id);
+    alert(id);
     var input, filter, ul, li, a, i;
     input = document.getElementById("inst_box"+id);
     filter = input.value.toUpperCase();
@@ -111,10 +103,3 @@ function instrument_search(id) {
         }
     });
 }
-
-$(document).foundation().foundation('joyride', 'start');
-
-var a = audiojs;
-a.events.ready(function() {
-    var a1 = a.createAll();
-});

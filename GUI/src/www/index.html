@@ -5,24 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
+        <!-- Bootstrap Core CSS -->
+        <link rel=stylesheet type=text/css href="../static/css/bootstrap.min.css">
+        <link rel=stylesheet type=text/css href="../static/css/bootstrap-slider.min.css">
+        <link rel=stylesheet type=text/css href="../static/css/style.css">
         {% if error %}
         <script>
             alert("{{error}}");
         </script>
         {% endif %}
         <script>
-            function inst_show(){
-                d = document.getElementById('inst_list');
-                if(d.classList.contains("hidden-xs")){
-                    d.classList.remove("hidden-xs");
-                    d.className += " col-xs-12";
-                }
-                else{
-                    d.classList.remove("col-xs-12");
-                    d.className += " hidden-xs";
-                }
-            }
-
             function init(){
                 var disabled = '{{disabled_radio}}';
                 if (disabled=="false"){
@@ -125,10 +117,10 @@
                 <div class="col-lg-8 col-md-10 col-sm-11 col-xs-12 col-center">
                     <h4 class="text-center">Choose Settings</h4>
                     <div class="radio">
-                        <input type="radio" name="optradio" onclick="show_hide('manual')" checked disabled>Default         
+                        <input type="radio" name="optradio" onclick="show('manual')" checked disabled>Default         
                     </div>
                     <div class="radio">
-                        <input type="radio" name="optradio" onclick="show_hide('manual');" disabled>Manual
+                        <input type="radio" name="optradio" onclick="show('manual');" disabled>Manual
                     </div>           
 
                     <div class="col-center" id="manual" style="display:none">
@@ -171,12 +163,12 @@
                             </div>
 
 
-                            <div class="hidden-lg hidden-md hidden-sm col-xs-12">
+                            <div class="col-xs-12 hidden-sm hidden-md hidden-lg hidden-xl">
                                 <div class="checkbox">
-                                    <input type="checkbox" id="il" name="optradio" onclick="inst_show()">Instruments
+                                    <input type="checkbox" id="il" name="optradio" onclick="show('inst_list')">Instruments
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 hidden-xs" id="inst_list">
+                            <div class="hidden-xs sm-col-6" id="inst_list">
                                 <h5>Instrument List:</h5>
                                 <ul id="inst_list1" class="inst_list">
                                     <div class="panel-group" id="accordion">
@@ -365,200 +357,11 @@
                                     </div> 
                                 </ul>
 
-
-                                <ul id="inst_list2" class="inst_list" style="display:none">
-                                    <div class="panel-group" id="accordion">
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse15">Piano</a></li>
-                                            <div id="collapse15" class="panel-collapse collapse in panel-body">
-                                                <li><a href="#/" class="inst_choice2">Acoustic Grand Piano</a></li>
-                                                <li><a href="#/" class="inst_choice2">Bright Acoustic Piano</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Grand Piano</a></li>
-                                                <li><a href="#/" class="inst_choice2">Honky-tonk Piano</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Piano 1</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Piano 2</a></li>
-                                                <li><a href="#/" class="inst_choice2">Harpsichord</a></li>
-                                                <li><a href="#/" class="inst_choice2">Clavinet</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse16">Organ</a></li>
-                                            <div id="collapse16" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Drawbar Organ</a></li>
-                                                <li><a href="#/" class="inst_choice2">Percussive Organ</a></li>
-                                                <li><a href="#/" class="inst_choice2">Rock Organ</a></li>
-                                                <li><a href="#/" class="inst_choice2">Church Organ</a></li>
-                                                <li><a href="#/" class="inst_choice2">Reed Organ</a></li>
-                                                <li><a href="#/" class="inst_choice2">Accordion</a></li>
-                                                <li><a href="#/" class="inst_choice2">Harmonica</a></li>
-                                                <li><a href="#/" class="inst_choice2">Tango Accordion</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse17">Guitar</a></li>
-                                            <div id="collapse17" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Acoustic Guitar (nylon)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Acoustic Guitar (steel)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Guitar (jazz)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Guitar (clean)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Guitar (muted)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Ovedriven Guitar</a></li>
-                                                <li><a href="#/" class="inst_choice2">Distortion Guitar</a></li>
-                                                <li><a href="#/" class="inst_choice2">Guitar Harmonics</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse18">Bass</a></li>
-                                            <div id="collapse18" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Acoustic Bass</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Bass (finger)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Electric Bass (pick)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Fretless Bass</a></li>
-                                                <li><a href="#/" class="inst_choice2">Slap Bass 1</a></li>
-                                                <li><a href="#/" class="inst_choice2">Slap Bass 2</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Bass 1</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Bass 2</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse19">Strings</a></li>
-                                            <div id="collapse19" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Violin</a></li>
-                                                <li><a href="#/" class="inst_choice2">Viola</a></li>
-                                                <li><a href="#/" class="inst_choice2">Cello</a></li>
-                                                <li><a href="#/" class="inst_choice2">Contrabass</a></li>
-                                                <li><a href="#/" class="inst_choice2">Tremolo Strings</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pizzicato Strings</a></li>
-                                                <li><a href="#/" class="inst_choice2">Orchestral Harp</a></li>
-                                                <li><a href="#/" class="inst_choice2">Timpani</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse20">Ensemble</a></li>
-                                            <div id="collapse20" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">String Ensemble 1</a></li>
-                                                <li><a href="#/" class="inst_choice2">String Ensemble 2</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Strings 1</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Strings 2</a></li>
-                                                <li><a href="#/" class="inst_choice2">Choir Aahs</a></li>
-                                                <li><a href="#/" class="inst_choice2">Choir Oohs</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Choir</a></li>
-                                                <li><a href="#/" class="inst_choice2">Orchestra Hit</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse21">Brass</a></li>
-                                            <div id="collapse21" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Trumpet</a></li>
-                                                <li><a href="#/" class="inst_choice2">Trombone</a></li>
-                                                <li><a href="#/" class="inst_choice2">Tuba</a></li>
-                                                <li><a href="#/" class="inst_choice2">Muted Trumped</a></li>
-                                                <li><a href="#/" class="inst_choice2">French Horn</a></li>
-                                                <li><a href="#/" class="inst_choice2">Brass Section</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Brass 1</a></li>
-                                                <li><a href="#/" class="inst_choice2">Synth Brass 2</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse22">Reed</a></li>
-                                            <div id="collapse22" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Soprano Sax</a></li>
-                                                <li><a href="#/" class="inst_choice2">Alto Sax</a></li>
-                                                <li><a href="#/" class="inst_choice2">Tenor Sax</a></li>
-                                                <li><a href="#/" class="inst_choice2">Baritone Sax</a></li>
-                                                <li><a href="#/" class="inst_choice2">Oboe</a></li>
-                                                <li><a href="#/" class="inst_choice2">English Horn</a></li>
-                                                <li><a href="#/" class="inst_choice2">Bassoon</a></li>
-                                                <li><a href="#/" class="inst_choice2">Clarinet</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse23">Pipe</a></li>
-                                            <div id="collapse23" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Piccolo</a></li>
-                                                <li><a href="#/" class="inst_choice2">Flute</a></li>
-                                                <li><a href="#/" class="inst_choice2">Recorder</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pan Flute</a></li>
-                                                <li><a href="#/" class="inst_choice2">Blown Bottle</a></li>
-                                                <li><a href="#/" class="inst_choice2">Shakahuachi</a></li>
-                                                <li><a href="#/" class="inst_choice2">Whistle</a></li>
-                                                <li><a href="#/" class="inst_choice2">Ocarina</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse24">Synth Lead</a></li>
-                                            <div id="collapse24" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Lead 1 (square)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 2 (sawtooth)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 3 (calliope)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 4 (chiff)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 5 (charang)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 6 (voice)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 7 (fifths)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Lead 8 (bass + lead)</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse25">Synth Pad</a></li>
-                                            <div id="collapse25" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Pad 1 (new age)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 2 (warm)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 3 (polysynth)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 4 (choir)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 5 (bowed)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 6 (metallic)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 7 (halo)</a></li>
-                                                <li><a href="#/" class="inst_choice2">Pad 8 (sweep)</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse26">Synth Effects</a></li>
-                                            <div id="collapse26" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">FX 1 (rain)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 2 (soundtrack)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 3 (crystal)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 4 (atmosphere)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 5 (brightness)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 6 (goblins)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 7 (echoes)</a></li>
-                                                <li><a href="#/" class="inst_choice2">FX 8 (sci-fi)</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse27">Ethnic</a></li>
-                                            <div id="collapse27" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Sitar</a></li>
-                                                <li><a href="#/" class="inst_choice2">Banjo</a></li>
-                                                <li><a href="#/" class="inst_choice2">Shamisen</a></li>
-                                                <li><a href="#/" class="inst_choice2">Koto</a></li>
-                                                <li><a href="#/" class="inst_choice2">Kalimba</a></li>
-                                                <li><a href="#/" class="inst_choice2">Bagpipe</a></li>
-                                                <li><a href="#/" class="inst_choice2">Fiddle</a></li>
-                                                <li><a href="#/" class="inst_choice2">Shanai</a></li>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse28">Sound Effects</a></li>
-                                            <div id="collapse28" class="panel-collapse collapse panel-body">
-                                                <li><a href="#/" class="inst_choice2">Guitar Fret Noise</a></li>
-                                                <li><a href="#/" class="inst_choice2">Breath Noise</a></li>
-                                                <li><a href="#/" class="inst_choice2">Seashore</a></li>
-                                                <li><a href="#/" class="inst_choice2">Bird Tweet</a></li>
-                                                <li><a href="#/" class="inst_choice2">Telephone Ring</a></li>
-                                                <li><a href="#/" class="inst_choice2">Helicopter</a></li>
-                                                <li><a href="#/" class="inst_choice2">Applause</a></li>
-                                                <li><a href="#/" class="inst_choice2">Gunshot</a></li>
-                                            </div>
-                                        </div>
-                                    </div> 
-                                </ul>
-
-
                                 <ul id="inst_list3" class="inst_list" style="display:none">
                                     <div class="panel-group" id="accordion">
                                         <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse29">Percussion</a></li>
-                                            <div id="collapse29" class="panel-collapse collapse in panel-body">
+                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse15">Percussion</a></li>
+                                            <div id="collapse15" class="panel-collapse collapse in panel-body">
                                                 <li><a href="#/" class="inst_choice3">Tinkle Bell</a></li>
                                                 <li><a href="#/" class="inst_choice3">Agogo</a></li>
                                                 <li><a href="#/" class="inst_choice3">Steel Drums</a></li>
@@ -570,8 +373,8 @@
                                             </div>
                                         </div>
                                         <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse30">Pitched Percussion</a></li>
-                                            <div id="collapse30" class="panel-collapse collapse panel-body">
+                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse16">Pitched Percussion</a></li>
+                                            <div id="collapse16" class="panel-collapse collapse panel-body">
                                                 <li><a href="#/" class="inst_choice3">Celesta</a></li>
                                                 <li><a href="#/" class="inst_choice3">Glockenspiel</a></li>
                                                 <li><a href="#/" class="inst_choice3">Music Box</a></li>
@@ -583,16 +386,9 @@
                                             </div>
                                         </div>
                                         <div class="panel panel-default">
-                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse31">Kits</a></li>
-                                            <div id="collapse31" class="panel-collapse collapse panel-body">
+                                            <li><a class="header panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapse17">Kits</a></li>
+                                            <div id="collapse17" class="panel-collapse collapse panel-body">
                                                 <li><a href="#/" class="inst_choice3">Drum Set</a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
-                                                <li><a href="#/" class="inst_choice3" style="display:none;"></a></li>
                                             </div>
                                         </div>
                                     </div> 
@@ -602,7 +398,7 @@
                             <!-- Advanced Settings -->
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="checkbox">
-                                    <input type="checkbox" id="adv" name="optradio" onclick="show_hide('advanced')">Advanced Settings
+                                    <input type="checkbox" id="adv" name="optradio" onclick="show('advanced')">Advanced Settings
                                 </div>
                                 <div id="advanced" style="display:none;">
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -659,15 +455,18 @@
     
     <!-- jQuery Version 1.11.1 -->
     <script type="text/javascript" src="../static/js/jquery.js"></script>
-    
-    <!-- Bootstrap Core CSS -->
-    <link rel=stylesheet type=text/css href="../static/css/bootstrap.min.css">
-    <link rel=stylesheet type=text/css href="../static/css/bootstrap-slider.min.css">
-    <link rel=stylesheet type=text/css href="../static/css/style.css">
-    
+
     <!-- Bootstrap Core JavaScript --> 
     <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../static/js/bootstrap-slider.min.js"></script>
+    <script type="text/javascript" src="../static/js/foundation.min.js"></script>
     <script type="text/javascript" src="../static/js/function.js"></script>
+    <script>
+        $(document).foundation().foundation('joyride', 'start');
+        var a = audiojs;
+        a.events.ready(function() {
+            var a1 = a.createAll();
+        });
+    </script>
 </html>
  

@@ -1,0 +1,32 @@
+
+Adar Guy, Colin Malloy, Hector Perez 
+											
+											Literature for Project Specification.
+
+From the literature, we were able to identify some options and previous solutions for key estimation and rhythm detection. 
+Some articles are very specific in terms of the implementation. For key estimation, chroma vectors are used, as seen in class.
+A fourier transform with high resolution is taken of the signal and posteriorly the frequencies are ‘folded’ into a 12 pitch histogram.
+ 
+For rhythm estimation, there are many different methods. 
+Goto and Muraoka developed two different systems that work depending on whether the input signal is drumless or not. 
+The drumless beat detection relies on probabilities of chord changes without actually detecting what the chord names are. 
+However, this research was based on MIDI files. There was research done by the same authors in regards to audio signals containing drums. 
+This system worked with acoustic audio signals, so the approach to finding the beats differed, and a complex multiple- hypothesis 
+approach was used to determine the best candidate for the rhythm. 
+
+Other methods for beat detection use autocorrelation, binary trees or trellis trees (related to Hidden Markov Models). 
+Timing nets (which are a form of neural network) are used in a self adjusting beat detector by R. Harper and Ed Jernigan. 
+Nodes (which represent hypothesis of where the next beat is) that are more likely to be correct predictions for 
+the beat are chosen as the current beat for the audio signal. The nodes take in ‘spike trains’ and try to find coincidences between their 
+train and the one found in the audio signal.
+
+An MIT research project is mentioned across the literature - it is called Machine Rhythm. 
+This system performs polyphonic MIDI rhythm detection.
+
+Another rhythm detection alternative came from E.D. Scheirer, and is performed on acoustic multi-timbral audio.
+This approach uses resonators to try to achieve phase-locking with the signal. The signal’s frequencies are divided into subbands and 
+then phase-locking is attempted. After this happens, the results are combined and the tempo of the signal is extracted.
+
+Peter Desain and Henkjan Honing used expectancy curves to generate an overall expectancy curve for the rhythm which displays spikes 
+for onsets of beats. They repeated the process of creating an expectancy curve for equal time length sections of the audio and multiplied 
+them by each other to generate a curve that is more representative of the average.
